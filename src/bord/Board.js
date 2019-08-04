@@ -35,20 +35,20 @@ export default class Board {
 
                 if (row === 0 || row === 7) { // black
                     if (col === 0 || col === 7) { 
-                        newFigire = new Rook(figureColor, row, col);
+                        newFigire = new Rook(figureColor, col, row);
                     } else if (col === 1 || col === 6) {
-                        newFigire = new Knight(figureColor, row, col);
+                        newFigire = new Knight(figureColor, col, row);
                     } else if (col === 2 || col === 5) {
-                        newFigire = new Bishop(figureColor, row, col);
+                        newFigire = new Bishop(figureColor, col, row);
                     } else if (col === 3) {
-                        newFigire = new Queen(figureColor, row, col);
+                        newFigire = new Queen(figureColor, col, row);
                     } else if (col === 4) {
-                        newFigire = new King(figureColor, row, col);
+                        newFigire = new King(figureColor, col, row);
                     }
                 } else if (row === 1) {
-                    newFigire = new Pawn('black', row, col, 7);
+                    newFigire = new Pawn('black', col, row, 7);
                 } else if (row === 6) { // white
-                    newFigire = new Pawn('white', row, col, 0);
+                    newFigire = new Pawn('white', col, row, 0);
                 } else {
                     newFigire = {};
                 }
