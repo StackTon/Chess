@@ -61,7 +61,7 @@ export default class App extends Component {
             this.clearActiveFigureAndPossibleMoves();
         } else {
             let currnetFigure = this.state.board.boardSpaces[y][x].figure;
-            let possibleMoves = currnetFigure.possibleMoves(this.state.board, x, y, true, this.state[currnetFigure.color + 'King'], this.state.lastMove);
+            let possibleMoves = currnetFigure.possibleMoves(this.state.board, true, this.state[currnetFigure.color + 'King'], this.state.lastMove);
 
             if(currnetFigure.name === 'King' && possibleMoves.length === 0) {
                 // TODO check all other figures moves if they can't move it's stale mate
@@ -254,7 +254,7 @@ export default class App extends Component {
                         </div>
                     );
                 })}
-                {console.log(this.state.board)}
+                {/* {console.log(this.state.board)} */}
             </div>
         );
     }

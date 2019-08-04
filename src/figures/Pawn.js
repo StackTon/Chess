@@ -8,8 +8,10 @@ export default class Pawn extends Figure {
         this.isMoved = false;
     }
 
-    possibleMoves(board, currentX, currentY, checkForColor, king, lastMove) {
+    possibleMoves(board, checkForColor, king, lastMove) {
         const moves = [];
+        const currentX = this.x;
+        const currentY = this.y;
 
         let addToY = 0;
 

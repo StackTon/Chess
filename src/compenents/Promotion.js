@@ -3,7 +3,6 @@ import React from 'react';
 import chessFiguresPictures from '../chessFiguresPictures';
 
 export default (props) => {
-    debugger;
     if (props.promotionMove) {
         return (
             <div className="promotion-bord">

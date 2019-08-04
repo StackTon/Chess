@@ -6,8 +6,10 @@ export default class Bishop extends Figure {
         this.name = 'Bishop';
     }
 
-    possibleMoves(board, currentX, currentY, checkForColor = true, king) {
-        let moves = [];
+    possibleMoves(board, checkForColor = true, king) {
+        const moves = [];
+        const currentX = this.x;
+        const currentY = this.y;
 
         let upLeftMove = true;
         let upRightMove = true;

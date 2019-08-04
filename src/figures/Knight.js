@@ -7,8 +7,10 @@ export default class Knight extends Figure {
         this.isMoved = false;
     }
 
-    possibleMoves(board, currentX, currentY, checkForColor = true, king) {
-        let moves = [];
+    possibleMoves(board, checkForColor = true, king) {
+        const moves = [];
+        const currentX = this.x;
+        const currentY = this.y;
 
         // up left move
         super.canMoveToSpace({ board: board, x: currentX - 1, y: currentY - 2, color: this.color, moves: moves, checkForColor: checkForColor });

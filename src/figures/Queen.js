@@ -9,8 +9,10 @@ export default class Queen extends Figure {
         this.name = 'Queen';
     }
 
-    possibleMoves(board, currentX, currentY, checkForColor = true, king) {
-        let moves = [];
+    possibleMoves(board, checkForColor = true, king) {
+        const moves = [];
+        const currentX = this.x;
+        const currentY = this.y;
 
         // up moves
         for (let i = currentY - 1; i >= 0; i--) {

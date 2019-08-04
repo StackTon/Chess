@@ -8,8 +8,10 @@ export default class King extends Figure {
         this.isThreaten = false;
     }
 
-    possibleMoves(board, currentX, currentY, checkForColor = true) {
-        let moves = [];
+    possibleMoves(board, checkForColor = true) {
+        const moves = [];
+        const currentX = this.x;
+        const currentY = this.y;
 
         // up left
         this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
