@@ -169,4 +169,16 @@ export default class Figure {
         }
         return arr;
     }
+
+    calculatePossibleMoves(board) {
+        let posibleTakeMoves = this.posibleTakeMoves(board, this.x, this.y);
+         for (const move of posibleTakeMoves) {
+             let space = board.boardSpaces[move.y][move.x];
+             if (this.color === 'black') {
+                 space.blackThreat.push(this);
+             } else if (this.color === 'white') {
+                  space.whiteThreat.push(this);
+             }
+         }
+     }
 }
