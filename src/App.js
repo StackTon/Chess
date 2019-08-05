@@ -8,8 +8,8 @@ import Knight from './figures/Knight';
 import Rook from './figures/Rook';
 
 // components
-import Field from './compenents/Field';
-import Promotion from './compenents/Promotion';
+import Field from './components/Field';
+import Promotion from './components/Promotion';
 
 import './App.css';
 
