@@ -42,7 +42,6 @@ export default class Figure {
     }
 
     checkIfKingIsInCheckAfterMove(board, king, fromX, fromY) {
-        debugger;
         let currentFigureColor = board.boardSpaces[fromY][fromX].figure.color;
         let possibleMoves = [];
         let isStraightMove = false;
