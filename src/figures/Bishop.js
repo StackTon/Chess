@@ -38,14 +38,14 @@ export default class Bishop extends Figure {
             }
         }
 
-        let checkIfKingIsInCheckAndMoves = true;
+        let isPinned = false;
         if(king) {
-            checkIfKingIsInCheckAndMoves = super.checkIfKingIsInCheckAfterMove(board, king, currentX, currentY);
+            isPinned = super.isPinned(board, king, currentX, currentY);
         }
-        if (checkIfKingIsInCheckAndMoves === true) {
+        if (isPinned === false) {
             return moves;
         } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, checkIfKingIsInCheckAndMoves);
+            return super.returnEqualElemetsFromTwoArrays(moves, isPinned);
         }
     }
 

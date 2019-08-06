@@ -41,7 +41,7 @@ export default class Figure {
         }
     }
 
-    checkIfKingIsInCheckAfterMove(board, king, fromX, fromY) {
+    isPinned(board, king, fromX, fromY) {
         let currentFigureColor = board.boardSpaces[fromY][fromX].figure.color;
         let possibleMoves = [];
         let isStraightMove = false;
@@ -78,14 +78,14 @@ export default class Figure {
                     y += i;
                 }
             } else {
-                return true;
+                return false;
             }
 
             let currnetSpace = board.boardSpaces[y][x];
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
                 if (x !== fromX || y !== fromY) {
-                    return true;
+                    return false;
                 } else {
                     break;
                 }
@@ -130,11 +130,11 @@ export default class Figure {
                     possibleMoves.push({ x: fromX + i, y: fromY - i });
                 }
             } else {
-                return true;
+                return false;
             }
 
             if(currnetSpace === undefined) {
-                return true;
+                return false;
             }
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
@@ -143,7 +143,7 @@ export default class Figure {
                 } else if (!isStraightMove && (currnetSpace.figure.name === 'Queen' || currnetSpace.figure.name === 'Bishop') && currentFigureColor !== currnetSpace.figure.color) {
                     return possibleMoves;
                 } else {
-                    return true;
+                    return false;
                 }
             }
 
@@ -151,7 +151,7 @@ export default class Figure {
             let lastY = possibleMoves[possibleMoves.length - 1].y;
 
             if (lastX === 7 || lastX === 0 || lastY === 7 || lastY === 0) {
-                return true;
+                return false;
             }
         }
     }
