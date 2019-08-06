@@ -42,6 +42,10 @@ export default class Figure {
     }
 
     isPinned(board, king, fromX, fromY) {
+        const response = {
+            isPinned: false,
+            possibleMoves: []
+        };
         let currentFigureColor = board.boardSpaces[fromY][fromX].figure.color;
         let possibleMoves = [];
         let isStraightMove = false;
@@ -52,13 +56,13 @@ export default class Figure {
             if (fromX === king.x) { // check up and down 
                 if (king.y > fromY) { // down
                     y -= i;
-                } else if(king.y < fromY) { // up
+                } else if (king.y < fromY) { // up
                     y += i;
                 }
             } else if (fromY === king.y) { // check rigth and left check
                 if (king.x > fromX) { // left
                     x -= i;
-                } else if(king.x < fromX) { // rigth
+                } else if (king.x < fromX) { // rigth
                     x += i
                 }
             } else if (fromX - fromY === king.x - king.y && fromY - fromX === king.y - king.x) { // check up left and right down diagonal
@@ -78,14 +82,14 @@ export default class Figure {
                     y += i;
                 }
             } else {
-                return false;
+                return response;
             }
 
             let currnetSpace = board.boardSpaces[y][x];
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
                 if (x !== fromX || y !== fromY) {
-                    return false;
+                    return response;
                 } else {
                     break;
                 }
@@ -99,51 +103,55 @@ export default class Figure {
                 isStraightMove = true;
                 if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX)) { // down
                     currnetSpace = board.boardSpaces[fromY - i][fromX];
-                    possibleMoves.push({ x: fromX, y: fromY - i });
+                    possibleMoves.push({ y: fromY - i, x: fromX });
                 } else if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX)) { // up
                     currnetSpace = board.boardSpaces[fromY + i][fromX];
-                    possibleMoves.push({ x: fromX, y: fromY + i });
+                    possibleMoves.push({ y: fromY + i, x: fromX });
                 }
             } else if (fromY === king.y) { // check rigth and left check
                 isStraightMove = true;
                 if (king.x > fromX && this.checkIfCordinatesAreValid(fromY, fromX - i)) { // left
                     currnetSpace = board.boardSpaces[fromY][fromX - i];
-                    possibleMoves.push({ x: fromX, y: fromY - i });
+                    possibleMoves.push({ y: fromY, x: fromX - i });
                 } else if (king.x < fromX && this.checkIfCordinatesAreValid(fromY, fromX + i)) { // rigth
                     currnetSpace = board.boardSpaces[fromY][fromX + i];
-                    possibleMoves.push({ x: fromX, y: fromY + i });
+                    possibleMoves.push({ y: fromY, x: fromX + i });
                 }
             } else if (fromX - fromY === king.x - king.y && fromY - fromX === king.y - king.x) { // check up left and right down diagonal
                 if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX + i)) { // up left
                     currnetSpace = board.boardSpaces[fromY + i][fromX + i];
-                    possibleMoves.push({ x: fromX + i, y: fromY + i });
+                    possibleMoves.push({ y: fromY + i, x: fromX + i });
                 } else if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX - i)) { // down right
                     currnetSpace = board.boardSpaces[fromY - i][fromX - i];
-                    possibleMoves.push({ x: fromX - i, y: fromY - i });
+                    possibleMoves.push({ y: fromY - i, x: fromX - i });
                 }
             } else if (fromX + fromY === king.x + king.y) { // check up right and down left diagonal
                 if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX + i)) { // up right
                     currnetSpace = board.boardSpaces[fromY - i][fromX + i];
-                    possibleMoves.push({ x: fromX - i, y: fromY + i });
+                    possibleMoves.push({ y: fromY - i, x: fromX + i });
                 } else if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX - i)) { // down left
                     currnetSpace = board.boardSpaces[fromY + i][fromX - i];
-                    possibleMoves.push({ x: fromX + i, y: fromY - i });
+                    possibleMoves.push({ y: fromY + i, x: fromX - i });
                 }
             } else {
-                return false;
+                return response;
             }
 
-            if(currnetSpace === undefined) {
-                return false;
+            if (currnetSpace === undefined) {
+                return response;
             }
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
                 if (isStraightMove && (currnetSpace.figure.name === 'Queen' || currnetSpace.figure.name === 'Rook') && currentFigureColor !== currnetSpace.figure.color) {
-                    return possibleMoves;
+                    response.isPinned = true;
+                    response.possibleMoves = possibleMoves
+                    return response;
                 } else if (!isStraightMove && (currnetSpace.figure.name === 'Queen' || currnetSpace.figure.name === 'Bishop') && currentFigureColor !== currnetSpace.figure.color) {
-                    return possibleMoves;
+                    response.isPinned = true;
+                    response.possibleMoves = possibleMoves
+                    return response;
                 } else {
-                    return false;
+                    return response;
                 }
             }
 
@@ -151,7 +159,7 @@ export default class Figure {
             let lastY = possibleMoves[possibleMoves.length - 1].y;
 
             if (lastX === 7 || lastX === 0 || lastY === 7 || lastY === 0) {
-                return false;
+                return response;
             }
         }
     }
@@ -162,7 +170,7 @@ export default class Figure {
             let el1 = arr1[i];
             for (let j = 0; j < arr2.length; j++) {
                 const el2 = arr2[j];
-                if(el1.x === el2.x && el1.y === el2.y) {
+                if (el1.x === el2.x && el1.y === el2.y) {
                     arr.push(el1);
                 }
             }
@@ -172,13 +180,13 @@ export default class Figure {
 
     calculatePossibleMoves(board) {
         let posibleTakeMoves = this.posibleTakeMoves(board, this.x, this.y);
-         for (const move of posibleTakeMoves) {
-             let space = board.boardSpaces[move.y][move.x];
-             if (this.color === 'black') {
-                 space.blackThreat.push(this);
-             } else if (this.color === 'white') {
-                  space.whiteThreat.push(this);
-             }
-         }
-     }
+        for (const move of posibleTakeMoves) {
+            let space = board.boardSpaces[move.y][move.x];
+            if (this.color === 'black') {
+                space.blackThreat.push(this);
+            } else if (this.color === 'white') {
+                space.whiteThreat.push(this);
+            }
+        }
+    }
 }

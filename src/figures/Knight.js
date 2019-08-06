@@ -37,14 +37,11 @@ export default class Knight extends Figure {
         super.canMoveToSpace({ board: board, x: currentX - 2, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
 
 
-        let isPinned = false;
-        if(king) {
-            isPinned = super.isPinned(board, king, currentX, currentY);
-        }
-        if (isPinned === false) {
+        const response = super.isPinned(board, king, currentX, currentY);
+        if (response.isPinned === false) {
             return moves;
         } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, isPinned);
+            return super.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
         }
     }
 

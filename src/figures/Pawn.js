@@ -43,11 +43,12 @@ export default class Pawn extends Figure {
                 this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY + addToY, color: this.color, moves: moves, frontMove: true });
             }
         }
-        const isPinned = super.isPinned(board, king, currentX, currentY);
-        if (isPinned === false) {
+
+        const response = super.isPinned(board, king, currentX, currentY);
+        if (response.isPinned === false) {
             return moves;
         } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, isPinned);
+            return super.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
         }
     }
 

@@ -44,14 +44,11 @@ export default class Rook extends Figure {
             }
         }
 
-        let isPinned = false;
-        if(king) {
-            isPinned = super.isPinned(board, king, currentX, currentY);
-        }
-        if (isPinned === false) {
+        const response = super.isPinned(board, king, currentX, currentY);
+        if (response.isPinned === false) {
             return moves;
         } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, isPinned);
+            return super.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
         }
     }
 
