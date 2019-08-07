@@ -1,5 +1,7 @@
 import Figure from './Figure';
 
+import utils from '../utils/utils';
+
 export default class King extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
@@ -57,13 +59,13 @@ export default class King extends Figure {
     }
 
     canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, checkForColor: checkForColor = true }) {
-        if (!this.checkIfCordinatesAreValid(x, y)) {
+        if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
 
         let figure = board.boardSpaces[y][x].figure;
 
-        if (checkForColor === true && !this.checkForColorDifrence(figure.color, color)) {
+        if (checkForColor === true && !utils.checkForColorDifrence(figure.color, color)) {
             return false;
         }
 

@@ -1,5 +1,7 @@
 import Figure from './Figure';
 
+import utils from '../utils/utils';
+
 export default class Pawn extends Figure {
     constructor(color, x, y, finalPoint) {
         super(color, x, y);
@@ -44,22 +46,18 @@ export default class Pawn extends Figure {
             }
         }
 
-        const response = super.isPinned(board, king, currentX, currentY);
-        if (response.isPinned === false) {
-            return moves;
-        } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
-        }
+        const response = this.isPinned(board, king, currentX, currentY);
+        return this.handerIsPinnedResponse(response, moves);
     }
 
     canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, sideMove: sideMove = false, frontMove: frontMove = false }) {
-        if (!super.checkIfCordinatesAreValid(x, y)) {
+        if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
 
         let figure = board.boardSpaces[y][x].figure;
 
-        if (!super.checkForColorDifrence(figure.color, color)) {
+        if (!utils.checkForColorDifrence(figure.color, color)) {
             return false;
         }
 
@@ -90,11 +88,11 @@ export default class Pawn extends Figure {
         let x2 = currentX + 1;
         let y2 = currentY + addToY;
 
-        if (super.checkIfCordinatesAreValid(x1, y1)) {
+        if (utils.checkIfCordinatesAreValid(x1, y1)) {
             moves.push({ x: x1, y: y1 });
         }
 
-        if (super.checkIfCordinatesAreValid(x2, y2)) {
+        if (utils.checkIfCordinatesAreValid(x2, y2)) {
             moves.push({ x: x2, y: y2 });
         }
 

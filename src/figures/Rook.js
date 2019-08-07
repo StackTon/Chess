@@ -12,44 +12,10 @@ export default class Rook extends Figure {
         const currentX = this.x;
         const currentY = this.y;
 
-        // up moves
-        for (let i = currentY - 1; i >= 0; i--) {
-            let currnetMove = super.canMoveToSpace({ board: board, x: currentX, y: i, color: this.color, moves: moves, checkForColor: checkForColor });
-            if (!currnetMove) {
-                break;
-            }
-        }
+        this.rookMoves(board, checkForColor, moves);
 
-        // right moves
-        for (let i = currentX + 1; i < 8; i++) {
-            let currnetMove = super.canMoveToSpace({ board: board, x: i, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
-            if (!currnetMove) {
-                break;
-            }
-        }
-
-        // down moves
-        for (let i = currentY + 1; i < 8; i++) {
-            let currnetMove = super.canMoveToSpace({ board: board, x: currentX, y: i, color: this.color, moves: moves, checkForColor: checkForColor });
-            if (!currnetMove) {
-                break;
-            }
-        }
-
-        // left moves
-        for (let i = currentX - 1; i >= 0; i--) {
-            let currnetMove = super.canMoveToSpace({ board: board, x: i, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
-            if (!currnetMove) {
-                break;
-            }
-        }
-
-        const response = super.isPinned(board, king, currentX, currentY);
-        if (response.isPinned === false) {
-            return moves;
-        } else {
-            return super.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
-        }
+        const response = this.isPinned(board, king, currentX, currentY);
+        return this.handerIsPinnedResponse(response, moves);
     }
 
     posibleTakeMoves(board, currentX, currentY) {

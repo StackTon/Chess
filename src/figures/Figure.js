@@ -1,3 +1,5 @@
+import utils from '../utils/utils';
+
 export default class Figure {
     constructor(color, x, y) {
         this.color = color;
@@ -5,30 +7,14 @@ export default class Figure {
         this.y = y;
     }
 
-    checkIfCordinatesAreValid(x, y) {
-        if (x > 7 || y > 7 || x < 0 || y < 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    checkForColorDifrence(color1, color2) {
-        if (color1 === color2) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, checkForColor: checkForColor = true }) {
-        if (!this.checkIfCordinatesAreValid(x, y)) {
+        if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
 
         let figure = board.boardSpaces[y][x].figure;
 
-        if (checkForColor === true && !this.checkForColorDifrence(figure.color, color)) {
+        if (checkForColor === true && !utils.checkForColorDifrence(figure.color, color)) {
             return false;
         }
 
@@ -101,35 +87,35 @@ export default class Figure {
 
             if (fromX === king.x) { // check up and down 
                 isStraightMove = true;
-                if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX)) { // down
+                if (king.y > fromY && utils.checkIfCordinatesAreValid(fromY - i, fromX)) { // down
                     currnetSpace = board.boardSpaces[fromY - i][fromX];
                     possibleMoves.push({ y: fromY - i, x: fromX });
-                } else if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX)) { // up
+                } else if (king.y < fromY && utils.checkIfCordinatesAreValid(fromY + i, fromX)) { // up
                     currnetSpace = board.boardSpaces[fromY + i][fromX];
                     possibleMoves.push({ y: fromY + i, x: fromX });
                 }
             } else if (fromY === king.y) { // check rigth and left check
                 isStraightMove = true;
-                if (king.x > fromX && this.checkIfCordinatesAreValid(fromY, fromX - i)) { // left
+                if (king.x > fromX && utils.checkIfCordinatesAreValid(fromY, fromX - i)) { // left
                     currnetSpace = board.boardSpaces[fromY][fromX - i];
                     possibleMoves.push({ y: fromY, x: fromX - i });
-                } else if (king.x < fromX && this.checkIfCordinatesAreValid(fromY, fromX + i)) { // rigth
+                } else if (king.x < fromX && utils.checkIfCordinatesAreValid(fromY, fromX + i)) { // rigth
                     currnetSpace = board.boardSpaces[fromY][fromX + i];
                     possibleMoves.push({ y: fromY, x: fromX + i });
                 }
             } else if (fromX - fromY === king.x - king.y && fromY - fromX === king.y - king.x) { // check up left and right down diagonal
-                if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX + i)) { // up left
+                if (king.y < fromY && utils.checkIfCordinatesAreValid(fromY + i, fromX + i)) { // up left
                     currnetSpace = board.boardSpaces[fromY + i][fromX + i];
                     possibleMoves.push({ y: fromY + i, x: fromX + i });
-                } else if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX - i)) { // down right
+                } else if (king.y > fromY && utils.checkIfCordinatesAreValid(fromY - i, fromX - i)) { // down right
                     currnetSpace = board.boardSpaces[fromY - i][fromX - i];
                     possibleMoves.push({ y: fromY - i, x: fromX - i });
                 }
             } else if (fromX + fromY === king.x + king.y) { // check up right and down left diagonal
-                if (king.y > fromY && this.checkIfCordinatesAreValid(fromY - i, fromX + i)) { // up right
+                if (king.y > fromY && utils.checkIfCordinatesAreValid(fromY - i, fromX + i)) { // up right
                     currnetSpace = board.boardSpaces[fromY - i][fromX + i];
                     possibleMoves.push({ y: fromY - i, x: fromX + i });
-                } else if (king.y < fromY && this.checkIfCordinatesAreValid(fromY + i, fromX - i)) { // down left
+                } else if (king.y < fromY && utils.checkIfCordinatesAreValid(fromY + i, fromX - i)) { // down left
                     currnetSpace = board.boardSpaces[fromY + i][fromX - i];
                     possibleMoves.push({ y: fromY + i, x: fromX - i });
                 }
@@ -164,20 +150,6 @@ export default class Figure {
         }
     }
 
-    returnEqualElemetsFromTwoArrays(arr1, arr2) {
-        const arr = [];
-        for (let i = 0; i < arr1.length; i++) {
-            let el1 = arr1[i];
-            for (let j = 0; j < arr2.length; j++) {
-                const el2 = arr2[j];
-                if (el1.x === el2.x && el1.y === el2.y) {
-                    arr.push(el1);
-                }
-            }
-        }
-        return arr;
-    }
-
     calculatePossibleMoves(board) {
         let posibleTakeMoves = this.posibleTakeMoves(board, this.x, this.y);
         for (const move of posibleTakeMoves) {
@@ -186,6 +158,87 @@ export default class Figure {
                 space.blackThreat.push(this);
             } else if (this.color === 'white') {
                 space.whiteThreat.push(this);
+            }
+        }
+    }
+
+    handerIsPinnedResponse(response, moves) {
+        if (response.isPinned === false) {
+            return moves;
+        } else {
+            return utils.returnEqualElemetsFromTwoArrays(moves, response.possibleMoves);
+        }
+    }
+
+    bishopMoves(board, checkForColor, moves) {
+        const currentX = this.x;
+        const currentY = this.y;
+    
+        let upLeftMove = true;
+        let upRightMove = true;
+        let downRightMove = true;
+        let downLeftMove = true;
+    
+        for (let i = 1; i <= 8; i++) {
+            // up left moves
+            if (upLeftMove) {
+                upLeftMove = this.canMoveToSpace({ board: board, x: currentX - i, y: currentY - i, color: this.color, moves: moves, checkForColor: checkForColor });
+            }
+    
+            // up right moves
+            if (upRightMove) {
+                upRightMove = this.canMoveToSpace({ board: board, x: currentX + i, y: currentY - i, color: this.color, moves: moves, checkForColor: checkForColor });
+            }
+    
+            // down right moves
+            if (downRightMove) {
+                downRightMove = this.canMoveToSpace({ board: board, x: currentX + i, y: currentY + i, color: this.color, moves: moves, checkForColor: checkForColor });
+            }
+    
+            // down left moves
+            if (downLeftMove) {
+                downLeftMove = this.canMoveToSpace({ board: board, x: currentX - i, y: currentY + i, color: this.color, moves: moves, checkForColor: checkForColor });
+            }
+
+            if(!upLeftMove && !upRightMove && !downRightMove && !downLeftMove) {
+                break;
+            }
+        }
+    }
+
+    rookMoves(board, checkForColor, moves) {
+        const currentX = this.x;
+        const currentY = this.y;
+
+        // up moves
+        for (let i = currentY - 1; i >= 0; i--) {
+            let currnetMove = this.canMoveToSpace({ board: board, x: currentX, y: i, color: this.color, moves: moves, checkForColor: checkForColor });
+            if (!currnetMove) {
+                break;
+            }
+        }
+
+        // right moves
+        for (let i = currentX + 1; i < 8; i++) {
+            let currnetMove = this.canMoveToSpace({ board: board, x: i, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+            if (!currnetMove) {
+                break;
+            }
+        }
+
+        // down moves
+        for (let i = currentY + 1; i < 8; i++) {
+            let currnetMove = this.canMoveToSpace({ board: board, x: currentX, y: i, color: this.color, moves: moves, checkForColor: checkForColor });
+            if (!currnetMove) {
+                break;
+            }
+        }
+
+        // left moves
+        for (let i = currentX - 1; i >= 0; i--) {
+            let currnetMove = this.canMoveToSpace({ board: board, x: i, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+            if (!currnetMove) {
+                break;
             }
         }
     }
