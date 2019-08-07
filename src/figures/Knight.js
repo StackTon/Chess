@@ -1,5 +1,4 @@
 import Figure from './Figure';
-import utils from '../utils/utils';
 
 export default class Knight extends Figure {
     constructor(color, x, y) {

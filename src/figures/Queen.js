@@ -1,9 +1,5 @@
 import Figure from './Figure';
 
-import Rook from './Rook';
-import Bishop from './Bishop';
-import utils from '../utils/utils';
-
 export default class Queen extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
