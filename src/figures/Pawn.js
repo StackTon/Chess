@@ -10,11 +10,7 @@ export default class Pawn extends Figure {
         this.isMoved = false;
     }
 
-    possibleMoves(board, checkForColor, king, lastMove) {
-        const moves = [];
-        const currentX = this.x;
-        const currentY = this.y;
-
+    figureMoves(board, checkForColor = true, king, lastMove) {
         let addToY = 0;
 
         if (this.finalPoint === 0) {
@@ -23,6 +19,17 @@ export default class Pawn extends Figure {
             addToY = 1;
         }
 
+        if (checkForColor) {
+            return this.normalMoves(board, king, lastMove, addToY);
+        } else {
+            return this.takeMoves(addToY);
+        }
+    }
+
+    normalMoves(board, king, lastMove, addToY) {
+        const currentX = this.x;
+        const currentY = this.y;
+        const moves = [];
         // up move
         let upMove = this.canMoveToSpace({ board: board, x: currentX, y: currentY + addToY, color: this.color, moves: moves, frontMove: true });
         if (upMove && this.isMoved === false) {
@@ -50,6 +57,29 @@ export default class Pawn extends Figure {
         return this.handerIsPinnedResponse(response, moves);
     }
 
+    takeMoves(addToY) {
+        const currentX = this.x;
+        const currentY = this.y;
+        const moves = [];
+        let x1 = currentX - 1;
+        let y1 = currentY + addToY;
+
+        let x2 = currentX + 1;
+        let y2 = currentY + addToY;
+
+        // up left
+        if (utils.checkIfCordinatesAreValid(x1, y1)) {
+            moves.push({ x: x1, y: y1 });
+        }
+
+        // up rigth
+        if (utils.checkIfCordinatesAreValid(x2, y2)) {
+            moves.push({ x: x2, y: y2 });
+        }
+
+        return moves;
+    }
+
     canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, sideMove: sideMove = false, frontMove: frontMove = false }) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
@@ -69,33 +99,5 @@ export default class Pawn extends Figure {
         }
 
         return false;
-    }
-
-    posibleTakeMoves(board, currentX, currentY) {
-        const moves = [];
-
-        let addToY = 0;
-
-        if (this.finalPoint === 0) {
-            addToY = -1;
-        } else {
-            addToY = 1;
-        }
-
-        let x1 = currentX - 1;
-        let y1 = currentY + addToY;
-
-        let x2 = currentX + 1;
-        let y2 = currentY + addToY;
-
-        if (utils.checkIfCordinatesAreValid(x1, y1)) {
-            moves.push({ x: x1, y: y1 });
-        }
-
-        if (utils.checkIfCordinatesAreValid(x2, y2)) {
-            moves.push({ x: x2, y: y2 });
-        }
-
-        return moves;
     }
 }

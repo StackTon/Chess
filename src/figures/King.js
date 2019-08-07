@@ -10,7 +10,7 @@ export default class King extends Figure {
         this.isThreaten = false;
     }
 
-    possibleMoves(board, checkForColor = true) {
+    figureMoves(board, checkForColor = true) {
         const moves = [];
         const currentX = this.x;
         const currentY = this.y;
@@ -80,19 +80,5 @@ export default class King extends Figure {
             moves.push({ x: x, y: y });
             return true;
         }
-    }
-
-    isThisSpaceThreaten(board, x, y) {
-        let space = board.boardSpaces[y][x];
-
-        if (this.color === 'black') {
-            return space.whiteThreat.length > 0;
-        } else if (this.color === 'white') {
-            return space.blackThreat.length > 0;
-        }
-    }
-
-    posibleTakeMoves(board, currentX, currentY) {
-        return this.possibleMoves(board, currentX, currentY, false);
     }
 }

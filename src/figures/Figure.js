@@ -5,6 +5,7 @@ export default class Figure {
         this.color = color;
         this.x = x;
         this.y = y;
+        this.possibleMoves = [];
     }
 
     canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, checkForColor: checkForColor = true }) {
@@ -150,9 +151,10 @@ export default class Figure {
         }
     }
 
-    calculatePossibleMoves(board) {
-        let posibleTakeMoves = this.posibleTakeMoves(board, this.x, this.y);
-        for (const move of posibleTakeMoves) {
+    calculatePossibleMoves(board, king, lastMove) {
+        let moves = this.getPossibleMobvesAndTakeMoves(board, king, lastMove);
+        this.possibleMoves = moves.possibleMoves;
+        for (const move of moves.posibleTakeMoves) {
             let space = board.boardSpaces[move.y][move.x];
             if (this.color === 'black') {
                 space.blackThreat.push(this);
@@ -160,6 +162,18 @@ export default class Figure {
                 space.whiteThreat.push(this);
             }
         }
+    }
+
+    getPossibleMobvesAndTakeMoves(board, king, lastMove) {
+        const moves = {
+            possibleMoves: [],
+            posibleTakeMoves: []
+        };
+
+        moves.possibleMoves = this.figureMoves(board, true, king, lastMove);
+        moves.posibleTakeMoves = this.figureMoves(board, false, king, lastMove);
+        
+        return moves;
     }
 
     handerIsPinnedResponse(response, moves) {
@@ -240,6 +254,16 @@ export default class Figure {
             if (!currnetMove) {
                 break;
             }
+        }
+    }
+
+    isThisSpaceThreaten(board, x, y) {
+        let space = board.boardSpaces[y][x];
+
+        if (this.color === 'black') {
+            return space.whiteThreat.length > 0;
+        } else if (this.color === 'white') {
+            return space.blackThreat.length > 0;
         }
     }
 }

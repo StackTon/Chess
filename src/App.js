@@ -61,7 +61,7 @@ export default class App extends Component {
             this.clearActiveFigureAndPossibleMoves();
         } else {
             let currnetFigure = this.state.board.boardSpaces[y][x].figure;
-            let possibleMoves = currnetFigure.possibleMoves(this.state.board, true, this.state[currnetFigure.color + 'King'], this.state.lastMove);
+            let possibleMoves = currnetFigure.possibleMoves;
 
             if (currnetFigure.name === 'King' && possibleMoves.length === 0) {
                 // TODO check all other figures moves if they can't move it's stale mate
@@ -123,7 +123,7 @@ export default class App extends Component {
                     }
                 });
             } else if (threatFigures.length === 2) {
-                let possibleKingMoves = this.state.board[kingCoordinates.y][kingCoordinates.x].figure.posibleTakeMoves(this.state.board, x, y);
+                let possibleKingMoves = this.state.board[kingCoordinates.y][kingCoordinates.x].figure.possibleMoves;
                 if (possibleKingMoves.length === 0) {
                     // TODO handle MATE
                     this.setState({ currnetTurn: 'mate' });
@@ -240,7 +240,7 @@ export default class App extends Component {
                             {row.map((currnetSpace, x) => {
                                 let currnetFigure = currnetSpace.figure;
                                 if (Object.keys(currnetFigure).length > 0) {
-                                    currnetFigure.calculatePossibleMoves(this.state.board);
+                                    currnetFigure.calculatePossibleMoves(this.state.board, this.state[currnetFigure.color + 'King'], this.state.lastMove);
                                 }
 
                                 return <Field

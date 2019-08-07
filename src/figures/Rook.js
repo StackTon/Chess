@@ -7,18 +7,18 @@ export default class Rook extends Figure {
         this.isMoved = false;
     }
 
-    possibleMoves(board, checkForColor = true, king) {
+    figureMoves(board, checkForColor = true, king) {
         const moves = [];
         const currentX = this.x;
         const currentY = this.y;
 
         this.rookMoves(board, checkForColor, moves);
 
-        const response = this.isPinned(board, king, currentX, currentY);
-        return this.handerIsPinnedResponse(response, moves);
-    }
-
-    posibleTakeMoves(board, currentX, currentY) {
-        return this.possibleMoves(board, currentX, currentY, false);
+        if(checkForColor) {
+            const response = this.isPinned(board, king, currentX, currentY);
+            return this.handerIsPinnedResponse(response, moves);
+        }
+        
+        return moves;
     }
 }

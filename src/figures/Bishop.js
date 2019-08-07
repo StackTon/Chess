@@ -6,18 +6,18 @@ export default class Bishop extends Figure {
         this.name = 'Bishop';
     }
 
-    possibleMoves(board, checkForColor = true, king) {
+    figureMoves(board, checkForColor = true, king) {
         const moves = [];
         const currentX = this.x;
         const currentY = this.y;
 
         this.bishopMoves(board, checkForColor, moves, super.canMoveToSpace);
 
-        const response = this.isPinned(board, king, currentX, currentY);
-        return this.handerIsPinnedResponse(response, moves);
-    }
-
-    posibleTakeMoves(board, currentX, currentY) {
-        return this.possibleMoves(board, currentX, currentY, false);
+        if(checkForColor) {
+            const response = this.isPinned(board, king, currentX, currentY);
+            return this.handerIsPinnedResponse(response, moves);
+        }
+        
+        return moves;
     }
 }

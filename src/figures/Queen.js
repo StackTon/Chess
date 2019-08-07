@@ -6,7 +6,7 @@ export default class Queen extends Figure {
         this.name = 'Queen';
     }
 
-    possibleMoves(board, checkForColor = true, king) {
+    figureMoves(board, checkForColor = true, king) {
         const moves = [];
         const currentX = this.x;
         const currentY = this.y;
@@ -14,11 +14,11 @@ export default class Queen extends Figure {
         this.rookMoves(board, checkForColor, moves);
         this.bishopMoves(board, checkForColor, moves);
 
-        const response = this.isPinned(board, king, currentX, currentY);
-        return this.handerIsPinnedResponse(response, moves);
-    }
+        if (checkForColor) {
+            const response = this.isPinned(board, king, currentX, currentY);
+            return this.handerIsPinnedResponse(response, moves);
+        }
 
-    posibleTakeMoves(board, currentX, currentY) {
-        return this.possibleMoves(board, currentX, currentY, false);
+        return moves;
     }
 }
