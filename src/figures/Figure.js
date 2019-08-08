@@ -151,29 +151,21 @@ export default class Figure {
         }
     }
 
-    calculatePossibleMoves(board, king, lastMove) {
-        let moves = this.getPossibleMobvesAndTakeMoves(board, king, lastMove);
-        this.possibleMoves = moves.possibleMoves;
-        for (const move of moves.posibleTakeMoves) {
-            let space = board.boardSpaces[move.y][move.x];
-            if (this.color === 'black') {
-                space.blackThreat.push(this);
-            } else if (this.color === 'white') {
-                space.whiteThreat.push(this);
+    calculatePossibleMoves(board, king, lastMove, checkForColor) {
+        let moves = this.figureMoves(board, checkForColor, king, lastMove);
+
+        if (checkForColor) {
+            this.possibleMoves = moves;
+        } else {
+            for (const move of moves) {
+                let space = board.boardSpaces[move.y][move.x];
+                if (this.color === 'black') {
+                    space.blackThreat.push(this);
+                } else if (this.color === 'white') {
+                    space.whiteThreat.push(this);
+                }
             }
         }
-    }
-
-    getPossibleMobvesAndTakeMoves(board, king, lastMove) {
-        const moves = {
-            possibleMoves: [],
-            posibleTakeMoves: []
-        };
-
-        moves.possibleMoves = this.figureMoves(board, true, king, lastMove);
-        moves.posibleTakeMoves = this.figureMoves(board, false, king, lastMove);
-        
-        return moves;
     }
 
     handerIsPinnedResponse(response, moves) {
@@ -187,34 +179,34 @@ export default class Figure {
     bishopMoves(board, checkForColor, moves) {
         const currentX = this.x;
         const currentY = this.y;
-    
+
         let upLeftMove = true;
         let upRightMove = true;
         let downRightMove = true;
         let downLeftMove = true;
-    
+
         for (let i = 1; i <= 8; i++) {
             // up left moves
             if (upLeftMove) {
                 upLeftMove = this.canMoveToSpace({ board: board, x: currentX - i, y: currentY - i, color: this.color, moves: moves, checkForColor: checkForColor });
             }
-    
+
             // up right moves
             if (upRightMove) {
                 upRightMove = this.canMoveToSpace({ board: board, x: currentX + i, y: currentY - i, color: this.color, moves: moves, checkForColor: checkForColor });
             }
-    
+
             // down right moves
             if (downRightMove) {
                 downRightMove = this.canMoveToSpace({ board: board, x: currentX + i, y: currentY + i, color: this.color, moves: moves, checkForColor: checkForColor });
             }
-    
+
             // down left moves
             if (downLeftMove) {
                 downLeftMove = this.canMoveToSpace({ board: board, x: currentX - i, y: currentY + i, color: this.color, moves: moves, checkForColor: checkForColor });
             }
 
-            if(!upLeftMove && !upRightMove && !downRightMove && !downLeftMove) {
+            if (!upLeftMove && !upRightMove && !downRightMove && !downLeftMove) {
                 break;
             }
         }

@@ -54,6 +54,8 @@ export default class App extends Component {
         this.promotionPawn = this.promotionPawn.bind(this);
         this.cleanBlackAndWhiteThreats = this.cleanBlackAndWhiteThreats.bind(this);
         this.updateKingPosition = this.updateKingPosition.bind(this);
+        this.calculatePossibleMovesForAllFigures = this.calculatePossibleMovesForAllFigures.bind(this);
+        this.calculateMoves = this.calculateMoves.bind(this);
     }
 
     setActiveFigure(x, y) {
@@ -115,7 +117,7 @@ export default class App extends Component {
 
                             if (Object.keys(currnetSpace.figure).length !== 0) {
                                 return x === move.x && y === move.y;
-                            } else if(x === move.x && y === move.y) {
+                            } else if (x === move.x && y === move.y) {
                                 return true;
                             }
                         }
@@ -221,6 +223,23 @@ export default class App extends Component {
         }
     }
 
+    calculateMoves(checkForColor) {
+        for (const row of this.state.board.boardSpaces) {
+            for (const space of row) {
+                let currnetFigure = space.figure;
+                if (Object.keys(currnetFigure).length > 0) {
+                    currnetFigure.calculatePossibleMoves(this.state.board, this.state[currnetFigure.color + 'King'], this.state.lastMove, checkForColor);
+                }
+            }
+        }
+    }
+
+    calculatePossibleMovesForAllFigures() {
+        this.cleanBlackAndWhiteThreats();
+        this.calculateMoves(false);
+        this.calculateMoves(true);
+    }
+
     updateKingPosition(color, x, y) {
         if (color === 'black') {
             this.setState({ blackKing: { x: x, y: y } });
@@ -230,7 +249,7 @@ export default class App extends Component {
     }
 
     render() {
-        this.cleanBlackAndWhiteThreats();
+        this.calculatePossibleMovesForAllFigures();
         return (
             <div className="chess-board">
                 <Promotion color={this.state.promotionMove.color} promotionPawn={this.promotionPawn} promotionMove={this.state.promotionMove.promotion} />
@@ -238,11 +257,6 @@ export default class App extends Component {
                     return (
                         <div className="row" key={y}>
                             {row.map((currnetSpace, x) => {
-                                let currnetFigure = currnetSpace.figure;
-                                if (Object.keys(currnetFigure).length > 0) {
-                                    currnetFigure.calculatePossibleMoves(this.state.board, this.state[currnetFigure.color + 'King'], this.state.lastMove);
-                                }
-
                                 return <Field
                                     currnetSpace={currnetSpace}
                                     key={y + x}
