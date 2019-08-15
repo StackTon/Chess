@@ -34,7 +34,7 @@ export default class Board {
                 }
 
                 if (row === 0 || row === 7) { // black
-                    if (col === 0 || col === 7) { 
+                    if (col === 0 || col === 7) {
                         newFigire = new Rook(figureColor, col, row);
                     } else if (col === 1 || col === 6) {
                         newFigire = new Knight(figureColor, col, row);

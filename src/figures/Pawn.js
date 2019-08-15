@@ -21,9 +21,8 @@ export default class Pawn extends Figure {
 
         if (checkForColor) {
             return this.normalMoves(board, king, lastMove, addToY);
-        } else {
-            return this.takeMoves(addToY);
         }
+        return this.takeMoves(addToY);
     }
 
     normalMoves(board, king, lastMove, addToY) {
@@ -31,41 +30,83 @@ export default class Pawn extends Figure {
         const currentY = this.y;
         const moves = [];
         // up move
-        let upMove = this.canMoveToSpace({ board: board, x: currentX, y: currentY + addToY, color: this.color, moves: moves, frontMove: true });
+        const upMove = this.constructor.canMoveToSpace({
+            board,
+            x: currentX,
+            y: currentY + addToY,
+            color: this.color,
+            moves,
+            frontMove: true,
+        });
         if (upMove && this.isMoved === false) {
             // double up move
-            this.canMoveToSpace({ board: board, x: currentX, y: currentY + (addToY * 2), color: this.color, moves: moves, frontMove: true });
+            this.constructor.canMoveToSpace({
+                board,
+                x: currentX,
+                y: currentY + (addToY * 2),
+                color: this.color,
+                moves,
+                frontMove: true,
+            });
         }
 
         // left take move
-        this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY + addToY, color: this.color, moves: moves, sideMove: true });
+        this.constructor.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY + addToY,
+            color: this.color,
+            moves,
+            sideMove: true,
+        });
 
         // right take move
-        this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY + addToY, color: this.color, moves: moves, sideMove: true });
+        this.constructor.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY + addToY,
+            color: this.color,
+            moves,
+            sideMove: true,
+        });
 
         // anpasan
-        let movesMade = Math.abs(lastMove.fromY - lastMove.toY);
+        const movesMade = Math.abs(lastMove.fromY - lastMove.toY);
         if (lastMove.figureName === 'Pawn' && movesMade === 2 && lastMove.toY === currentY) {
             if (lastMove.toX === currentX - 1) { // left en pasan
-                this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY + addToY, color: this.color, moves: moves, frontMove: true });
+                this.constructor.canMoveToSpace({
+                    board,
+                    x: currentX - 1,
+                    y: currentY + addToY,
+                    color: this.color,
+                    moves,
+                    frontMove: true,
+                });
             } else if (lastMove.toX === currentX + 1) { // right en pasan
-                this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY + addToY, color: this.color, moves: moves, frontMove: true });
+                this.constructor.canMoveToSpace({
+                    board,
+                    x: currentX + 1,
+                    y: currentY + addToY,
+                    color: this.color,
+                    moves,
+                    frontMove: true,
+                });
             }
         }
 
-        const response = this.isPinned(board, king, currentX, currentY);
-        return this.handerIsPinnedResponse(response, moves);
+        const response = Figure.isPinned(board, king, currentX, currentY);
+        return Figure.handerIsPinnedResponse(response, moves);
     }
 
     takeMoves(addToY) {
         const currentX = this.x;
         const currentY = this.y;
         const moves = [];
-        let x1 = currentX - 1;
-        let y1 = currentY + addToY;
+        const x1 = currentX - 1;
+        const y1 = currentY + addToY;
 
-        let x2 = currentX + 1;
-        let y2 = currentY + addToY;
+        const x2 = currentX + 1;
+        const y2 = currentY + addToY;
 
         // up left
         if (utils.checkIfCordinatesAreValid(x1, y1)) {
@@ -80,21 +121,21 @@ export default class Pawn extends Figure {
         return moves;
     }
 
-    canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, sideMove: sideMove = false, frontMove: frontMove = false }) {
+    static canMoveToSpace({ board, x, y, color, moves, sideMove: sideMove = false, frontMove: frontMove = false }) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
 
-        let figure = board.boardSpaces[y][x].figure;
+        const { figure } = board.boardSpaces[y][x];
 
         if (!utils.checkForColorDifrence(figure.color, color)) {
             return false;
         }
 
         if (Object.keys(figure).length !== 0 && sideMove === true) {
-            moves.push({ x: x, y: y });
+            moves.push({ x, y });
         } else if (Object.keys(figure).length === 0 && frontMove === true) {
-            moves.push({ x: x, y: y });
+            moves.push({ x, y });
             return true;
         }
 

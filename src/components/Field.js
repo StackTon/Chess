@@ -5,7 +5,7 @@ import chessFiguresPictures from '../chessFiguresPictures';
 export default (props) => {
     let isThisPossibleMove = false;
     let figureClassName = 'figure';
-    let spaceClassName = 'field ' + props.currnetSpace.color;
+    let spaceClassName = `field ${props.currnetSpace.color}`;
 
     if (props.x === props.activeFigureCoordinates.x && props.y === props.activeFigureCoordinates.y) {
         figureClassName += ' active-figure';
@@ -32,14 +32,16 @@ export default (props) => {
     }
 
     return (
-        <div className={spaceClassName} onClick={() => isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined}>
-            {isThisPossibleMove ? <div className="possible-move"></div> : <></>}
-            {chessFiguresPictures[props.currnetSpace.figure.color + props.currnetSpace.figure.name] ?
-                <img
+        <div className={spaceClassName} onClick={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}>
+        {isThisPossibleMove ? <div className="possible-move" /> : <></>}
+            {chessFiguresPictures[props.currnetSpace.figure.color + props.currnetSpace.figure.name]
+                ? (
+                    <img
                     src={chessFiguresPictures[props.currnetSpace.figure.color + props.currnetSpace.figure.name]}
                     className={figureClassName}
-                    onClick={() => props.currnetTurn === props.currnetSpace.figure.color ? props.setActiveFigure(props.x, props.y) : undefined}
-                /> : <></>}
-        </div>
-    )
-}
+                    onClick={() => (props.currnetTurn === props.currnetSpace.figure.color ? props.setActiveFigure(props.x, props.y) : undefined)}
+                  />
+                ) : <></>}
+      </div>
+    );
+};

@@ -16,54 +16,124 @@ export default class King extends Figure {
         const currentY = this.y;
 
         // up left
-        this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY - 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // up
-        this.canMoveToSpace({ board: board, x: currentX, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX,
+            y: currentY - 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // up right
-        this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY - 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // right
-        let rightMove = this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+        const rightMove = Figure.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         if (this.isMoved === false && rightMove === true && Object.keys(board.boardSpaces[currentY][6].figure).length === 0) {
-            let rightRook = board.boardSpaces[currentY][7].figure;
+            const rightRook = board.boardSpaces[currentY][7].figure;
 
             // right castlig
             if (rightRook.name === 'Rook' && rightRook.isMoved === false) {
-                this.canMoveToSpace({ board: board, x: currentX + 2, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+                Figure.canMoveToSpace({
+                    board,
+                    x: currentX + 2,
+                    y: currentY,
+                    color: this.color,
+                    moves,
+                    checkForColor,
+                });
             }
         }
 
         // down right
-        this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY + 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY + 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // down
-        this.canMoveToSpace({ board: board, x: currentX, y: currentY + 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX,
+            y: currentY + 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // down left
-        this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY + 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY + 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // left
-        let leftMove = this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+        const leftMove = Figure.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
         if (this.isMoved === false && leftMove === true && Object.keys(board.boardSpaces[currentY][1].figure).length === 0) {
-            let leftRook = board.boardSpaces[currentY][0].figure;
+            const leftRook = board.boardSpaces[currentY][0].figure;
             // left castlig
             if (leftRook.name === 'Rook' && leftRook.isMoved === false) {
-                this.canMoveToSpace({ board: board, x: currentX - 2, y: currentY, color: this.color, moves: moves, checkForColor: checkForColor });
+                Figure.canMoveToSpace({
+                    board,
+                    x: currentX - 2,
+                    y: currentY,
+                    color: this.color,
+                    moves,
+                    checkForColor,
+                });
             }
         }
 
         return moves;
     }
 
-    canMoveToSpace({ board: board, x: x, y: y, color: color, moves: moves, checkForColor: checkForColor = true }) {
+    canMoveToSpace({ board, x, y, color, moves, checkForColor: checkForColor = true }) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
 
-        let figure = board.boardSpaces[y][x].figure;
+        const { figure } = board.boardSpaces[y][x];
 
         if (checkForColor === true && !utils.checkForColorDifrence(figure.color, color)) {
             return false;
@@ -74,11 +144,10 @@ export default class King extends Figure {
         }
 
         if (Object.keys(figure).length !== 0) {
-            moves.push({ x: x, y: y });
+            moves.push({ x, y });
             return false;
-        } else {
-            moves.push({ x: x, y: y });
-            return true;
         }
+        moves.push({ x, y });
+        return true;
     }
 }

@@ -13,11 +13,11 @@ export default class Bishop extends Figure {
 
         this.bishopMoves(board, checkForColor, moves, super.canMoveToSpace);
 
-        if(checkForColor) {
-            const response = this.isPinned(board, king, currentX, currentY);
-            return this.handerIsPinnedResponse(response, moves);
+        if (checkForColor) {
+            const response = Figure.isPinned(board, king, currentX, currentY);
+            return Figure.handerIsPinnedResponse(response, moves);
         }
-        
+
         return moves;
     }
 }

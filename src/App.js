@@ -21,7 +21,7 @@ export default class App extends Component {
             board: new Board(),
             activeFigureCoordinates: {
                 x: '',
-                y: ''
+                y: '',
             },
             possibleMoves: [],
             lastMove: {
@@ -29,24 +29,24 @@ export default class App extends Component {
                 fromY: '',
                 toX: '',
                 toY: '',
-                figureName: ''
+                figureName: '',
             },
             promotionMove: {
                 x: '',
                 y: '',
                 promotion: false,
-                color: ''
+                color: '',
             },
             whiteKing: {
                 x: 4,
-                y: 7
+                y: 7,
             },
             blackKing: {
                 x: 4,
-                y: 0
+                y: 0,
             },
-            currnetTurn: 'white'
-        }
+            currnetTurn: 'white',
+        };
 
         this.setActiveFigure = this.setActiveFigure.bind(this);
         this.moveTo = this.moveTo.bind(this);
@@ -62,70 +62,69 @@ export default class App extends Component {
         if (this.state.activeFigureCoordinates.x === x && this.state.activeFigureCoordinates.y === y) {
             this.clearActiveFigureAndPossibleMoves();
         } else {
-            let currnetFigure = this.state.board.boardSpaces[y][x].figure;
-            let possibleMoves = currnetFigure.possibleMoves;
+            const currnetFigure = this.state.board.boardSpaces[y][x].figure;
+            let { possibleMoves } = currnetFigure;
 
             if (currnetFigure.name === 'King' && possibleMoves.length === 0) {
                 // TODO check all other figures moves if they can't move it's stale mate
             }
 
             // check if the king is in check
-            let kingCoordinates = this.state[currnetFigure.color + 'King'];
-            let opositeColor = currnetFigure.color === 'black' ? 'white' : 'black';
-            let threatFigures = this.state.board.boardSpaces[kingCoordinates.y][kingCoordinates.x][opositeColor + 'Threat'];
+            const kingCoordinates = this.state[`${currnetFigure.color}King`];
+            const opositeColor = currnetFigure.color === 'black' ? 'white' : 'black';
+            const threatFigures = this.state.board.boardSpaces[kingCoordinates.y][kingCoordinates.x][`${opositeColor}Threat`];
             if (threatFigures.length === 1 && currnetFigure.name !== 'King') {
                 const threatFigureX = threatFigures[0].x;
                 const threatFigureY = threatFigures[0].y;
-                possibleMoves = possibleMoves.filter(move => {
+                possibleMoves = possibleMoves.filter((move) => {
                     if (threatFigures[0].name === 'Knight' || threatFigures[0].name === 'Pawn') {
                         return move.x === threatFigureX && move.y === threatFigureY;
-                    } else {
-                        let x = kingCoordinates.x;
-                        let y = kingCoordinates.y;
-                        for (let i = 1; i <= 8; i++) {
-                            if (threatFigureX === kingCoordinates.x) { // check up and down 
-                                if (kingCoordinates.y > threatFigureY) { // down
-                                    y -= 1;
-                                } else if (kingCoordinates.y < threatFigureY) { // up
-                                    y += 1;
-                                }
-                            } else if (threatFigureY === kingCoordinates.y) { // check rigth and left check
-                                if (kingCoordinates.x > threatFigureX) { // left
-                                    x -= 1;
-                                } else if (kingCoordinates.x < threatFigureX) { // rigth
-                                    x += 1
-                                }
-                            } else if (threatFigureX - threatFigureY === kingCoordinates.x - kingCoordinates.y && threatFigureY - threatFigureX === kingCoordinates.y - kingCoordinates.x) { // check up left and right down diagonal
-                                if (kingCoordinates.y > threatFigureY) { // up left
-                                    x -= 1;
-                                    y -= 1;
-                                } else if (kingCoordinates.y < threatFigureY) { // right down
-                                    x += 1;
-                                    y += 1;
-                                }
-                            } else if (threatFigureX + threatFigureY === kingCoordinates.x + kingCoordinates.y) { // check up right and down left diagonal
-                                if (kingCoordinates.y > threatFigureY) { // up right
-                                    x += 1;
-                                    y -= 1;
-                                } else if (kingCoordinates.y < threatFigureY) { // down left
-                                    x -= 1;
-                                    y += 1;
-                                }
+                    }
+                    let { x } = kingCoordinates;
+                    let { y } = kingCoordinates;
+                    for (let i = 1; i <= 8; i++) {
+                        if (threatFigureX === kingCoordinates.x) { // check up and down
+                            if (kingCoordinates.y > threatFigureY) { // down
+                                y -= 1;
+                            } else if (kingCoordinates.y < threatFigureY) { // up
+                                y += 1;
                             }
-
-                            let currnetSpace = this.state.board.boardSpaces[y][x];
-
-                            if (Object.keys(currnetSpace.figure).length !== 0) {
-                                return x === move.x && y === move.y;
-                            } else if (x === move.x && y === move.y) {
-                                return true;
+                        } else if (threatFigureY === kingCoordinates.y) { // check rigth and left check
+                            if (kingCoordinates.x > threatFigureX) { // left
+                                x -= 1;
+                            } else if (kingCoordinates.x < threatFigureX) { // rigth
+                                x += 1;
+                            }
+                        } else if (threatFigureX - threatFigureY === kingCoordinates.x - kingCoordinates.y && threatFigureY - threatFigureX === kingCoordinates.y - kingCoordinates.x) { // check up left and right down diagonal
+                            if (kingCoordinates.y > threatFigureY) { // up left
+                                x -= 1;
+                                y -= 1;
+                            } else if (kingCoordinates.y < threatFigureY) { // right down
+                                x += 1;
+                                y += 1;
+                            }
+                        } else if (threatFigureX + threatFigureY === kingCoordinates.x + kingCoordinates.y) { // check up right and down left diagonal
+                            if (kingCoordinates.y > threatFigureY) { // up right
+                                x += 1;
+                                y -= 1;
+                            } else if (kingCoordinates.y < threatFigureY) { // down left
+                                x -= 1;
+                                y += 1;
                             }
                         }
-                        return false;
+
+                        const currnetSpace = this.state.board.boardSpaces[y][x];
+
+                        if (Object.keys(currnetSpace.figure).length !== 0) {
+                            return x === move.x && y === move.y;
+                        } if (x === move.x && y === move.y) {
+                            return true;
+                        }
                     }
+                    return false;
                 });
             } else if (threatFigures.length === 2) {
-                let possibleKingMoves = this.state.board[kingCoordinates.y][kingCoordinates.x].figure.possibleMoves;
+                const possibleKingMoves = this.state.board[kingCoordinates.y][kingCoordinates.x].figure.possibleMoves;
                 if (possibleKingMoves.length === 0) {
                     // TODO handle MATE
                     this.setState({ currnetTurn: 'mate' });
@@ -135,12 +134,12 @@ export default class App extends Component {
                     possibleMoves = [];
                 }
             }
-            this.setState({ possibleMoves: possibleMoves, activeFigureCoordinates: { x, y } });
+            this.setState({ possibleMoves, activeFigureCoordinates: { x, y } });
         }
     }
 
     moveTo(x, y) {
-        let currnetFigure = this.state.board.boardSpaces[this.state.activeFigureCoordinates.y][this.state.activeFigureCoordinates.x].figure;
+        const currnetFigure = this.state.board.boardSpaces[this.state.activeFigureCoordinates.y][this.state.activeFigureCoordinates.x].figure;
 
         if (currnetFigure.color === 'white') {
             this.setState({ currnetTurn: 'black' });
@@ -153,7 +152,6 @@ export default class App extends Component {
                 if (x === 2) { // left castlig
                     this.state.board.boardSpaces[y][3].figure = this.state.board.boardSpaces[y][0].figure;
                     this.state.board.boardSpaces[y][0].figure = {};
-
                 } else if (x === 6) { // right castlig
                     this.state.board.boardSpaces[y][5].figure = this.state.board.boardSpaces[y][0].figure;
                     this.state.board.boardSpaces[y][7].figure = {};
@@ -169,10 +167,10 @@ export default class App extends Component {
 
         // pawn promotion
         if (currnetFigure.name === 'Pawn' && currnetFigure.finalPoint === y) {
-            this.setState({ promotionMove: { x: x, y: y, promotion: true, color: currnetFigure.color } });
+            this.setState({ promotionMove: { x, y, promotion: true, color: currnetFigure.color } });
         }
 
-        this.setState({ lastMove: { fromX: this.state.activeFigureCoordinates.x, fromY: this.state.activeFigureCoordinates.y, toX: x, toY: y, figureName: currnetFigure.name } })
+        this.setState({ lastMove: { fromX: this.state.activeFigureCoordinates.x, fromY: this.state.activeFigureCoordinates.y, toX: x, toY: y, figureName: currnetFigure.name } });
 
         this.state.board.boardSpaces[y][x].figure = currnetFigure;
 
@@ -189,9 +187,7 @@ export default class App extends Component {
     }
 
     promotionPawn(figure) {
-        const color = this.state.promotionMove.color;
-        const x = this.state.promotionMove.x;
-        const y = this.state.promotionMove.y;
+        const { x, y, color } = this.state.promotionMove;
         let promotionFigure = {};
         if (figure === 'Queen') {
             promotionFigure = new Queen(color, x, y);
@@ -214,7 +210,7 @@ export default class App extends Component {
 
     cleanBlackAndWhiteThreats() {
         for (let i = 0; i < this.state.board.boardSpaces.length; i++) {
-            let row = this.state.board.boardSpaces[i];
+            const row = this.state.board.boardSpaces[i];
             for (let j = 0; j < row.length; j++) {
                 const currentSpace = row[j];
                 currentSpace.whiteThreat = [];
@@ -226,9 +222,9 @@ export default class App extends Component {
     calculateMoves(checkForColor) {
         for (const row of this.state.board.boardSpaces) {
             for (const space of row) {
-                let currnetFigure = space.figure;
+                const currnetFigure = space.figure;
                 if (Object.keys(currnetFigure).length > 0) {
-                    currnetFigure.calculatePossibleMoves(this.state.board, this.state[currnetFigure.color + 'King'], this.state.lastMove, checkForColor);
+                    currnetFigure.calculatePossibleMoves(this.state.board, this.state[`${currnetFigure.color}King`], this.state.lastMove, checkForColor);
                 }
             }
         }
@@ -242,9 +238,9 @@ export default class App extends Component {
 
     updateKingPosition(color, x, y) {
         if (color === 'black') {
-            this.setState({ blackKing: { x: x, y: y } });
+            this.setState({ blackKing: { x, y } });
         } else if (color === 'white') {
-            this.setState({ whiteKing: { x: x, y: y } });
+            this.setState({ whiteKing: { x, y } });
         }
     }
 
@@ -253,28 +249,26 @@ export default class App extends Component {
         return (
             <div className="chess-board">
                 <Promotion color={this.state.promotionMove.color} promotionPawn={this.promotionPawn} promotionMove={this.state.promotionMove.promotion} />
-                {this.state.board.boardSpaces.map((row, y) => {
-                    return (
-                        <div className="row" key={y}>
-                            {row.map((currnetSpace, x) => {
-                                return <Field
-                                    currnetSpace={currnetSpace}
-                                    key={y + x}
-                                    y={y}
-                                    x={x}
-                                    activeFigureCoordinates={this.state.activeFigureCoordinates}
-                                    setActiveFigure={this.setActiveFigure}
-                                    possibleMoves={this.state.possibleMoves}
-                                    moveTo={this.moveTo}
-                                    lastMove={this.state.lastMove}
-                                    currnetTurn={this.state.currnetTurn}
-                                />
-                            })}
-                        </div>
-                    );
-                })}
+                {this.state.board.boardSpaces.map((row, y) => (
+                <div className="row" key={y}>
+                        {row.map((currnetSpace, x) => (
+                            <Field
+                                currnetSpace={currnetSpace}
+                                key={y + x}
+                                y={y}
+                                x={x}
+                                activeFigureCoordinates={this.state.activeFigureCoordinates}
+                                setActiveFigure={this.setActiveFigure}
+                                possibleMoves={this.state.possibleMoves}
+                                moveTo={this.moveTo}
+                                lastMove={this.state.lastMove}
+                                currnetTurn={this.state.currnetTurn}
+                          />
+                        ))}
+              </div>
+                ))}
                 {/* {console.log(this.state.board)} */}
-            </div>
+          </div>
         );
     }
 }

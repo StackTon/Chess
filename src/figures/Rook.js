@@ -14,11 +14,11 @@ export default class Rook extends Figure {
 
         this.rookMoves(board, checkForColor, moves);
 
-        if(checkForColor) {
-            const response = this.isPinned(board, king, currentX, currentY);
-            return this.handerIsPinnedResponse(response, moves);
+        if (checkForColor) {
+            const response = Figure.isPinned(board, king, currentX, currentY);
+            return Figure.handerIsPinnedResponse(response, moves);
         }
-        
+
         return moves;
     }
 }

@@ -15,8 +15,8 @@ export default class Queen extends Figure {
         this.bishopMoves(board, checkForColor, moves);
 
         if (checkForColor) {
-            const response = this.isPinned(board, king, currentX, currentY);
-            return this.handerIsPinnedResponse(response, moves);
+            const response = Figure.isPinned(board, king, currentX, currentY);
+            return Figure.handerIsPinnedResponse(response, moves);
         }
 
         return moves;

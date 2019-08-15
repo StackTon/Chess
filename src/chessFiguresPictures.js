@@ -23,5 +23,5 @@ export default {
     blackQueen,
     whiteQueen,
     blackKing,
-    whiteKing
+    whiteKing,
 };

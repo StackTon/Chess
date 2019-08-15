@@ -13,35 +13,91 @@ export default class Knight extends Figure {
         const currentY = this.y;
 
         // up left move
-        this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY - 2, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY - 2,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // up right move
-        this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY - 2, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY - 2,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // right up move
-        this.canMoveToSpace({ board: board, x: currentX + 2, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 2,
+            y: currentY - 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // righy down move
-        this.canMoveToSpace({ board: board, x: currentX + 2, y: currentY + 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 2,
+            y: currentY + 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // down left move
-        this.canMoveToSpace({ board: board, x: currentX + 1, y: currentY + 2, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX + 1,
+            y: currentY + 2,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // down right move
-        this.canMoveToSpace({ board: board, x: currentX - 1, y: currentY + 2, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 1,
+            y: currentY + 2,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // left down move
-        this.canMoveToSpace({ board: board, x: currentX - 2, y: currentY + 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 2,
+            y: currentY + 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
         // left up move
-        this.canMoveToSpace({ board: board, x: currentX - 2, y: currentY - 1, color: this.color, moves: moves, checkForColor: checkForColor });
+        Figure.canMoveToSpace({
+            board,
+            x: currentX - 2,
+            y: currentY - 1,
+            color: this.color,
+            moves,
+            checkForColor,
+        });
 
 
-        if(checkForColor) {
-            const response = this.isPinned(board, king, currentX, currentY);
-            return this.handerIsPinnedResponse(response, moves);
+        if (checkForColor) {
+            const response = Figure.isPinned(board, king, currentX, currentY);
+            return Figure.handerIsPinnedResponse(response, moves);
         }
-        
+
         return moves;
     }
 }
