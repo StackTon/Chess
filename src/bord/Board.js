@@ -53,7 +53,7 @@ export default class Board {
                     newFigire = {};
                 }
 
-                rowSpaces.push(new Space(spaceColor, newFigire));
+                rowSpaces.push(new Space(row + col, spaceColor, newFigire));
             }
             this.boardSpaces.push(rowSpaces);
         }

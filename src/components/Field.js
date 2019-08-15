@@ -1,21 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import Figure from './Figure';
 
 import chessFiguresPictures from '../chessFiguresPictures';
 
-export default (props) => {
+const Field = (props) => {
     let isThisPossibleMove = false;
     let figureClassName = 'figure';
-    let spaceClassName = `field ${props.currnetSpace.color}`;
+    let spaceClassName = `field ${props.currentSpace.color}`;
 
     if (props.x === props.activeFigureCoordinates.x && props.y === props.activeFigureCoordinates.y) {
         figureClassName += ' active-figure';
     }
 
-    if (props.currnetSpace.figure.name === 'King' && ((props.currnetSpace.blackThreat.length > 0 && props.currnetSpace.figure.color === 'white') || (props.currnetSpace.whiteThreat.length > 0 && props.currnetSpace.figure.color === 'black'))) {
+    if (props.currentSpace.figure.name === 'King' && ((props.currentSpace.blackThreat.length > 0 && props.currentSpace.figure.color === 'white') || (props.currentSpace.whiteThreat.length > 0 && props.currentSpace.figure.color === 'black'))) {
         figureClassName += ' threaten-king';
     }
 
-    if (props.currnetSpace.figure.color === props.currnetTurn) {
+    if (props.currentSpace.figure.color === props.currnetTurn) {
         figureClassName += ' cursor-pointer';
     }
 
@@ -32,16 +35,97 @@ export default (props) => {
     }
 
     return (
-        <div className={spaceClassName} onClick={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}>
-        {isThisPossibleMove ? <div className="possible-move" /> : <></>}
-            {chessFiguresPictures[props.currnetSpace.figure.color + props.currnetSpace.figure.name]
+        <div
+            className={spaceClassName}
+            onClick={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}
+            onKeyUp={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}
+            role="button"
+        >
+            {isThisPossibleMove ? <div className="possible-move" /> : <></>}
+            {chessFiguresPictures[props.currentSpace.figure.color + props.currentSpace.figure.name]
                 ? (
-                    <img
-                    src={chessFiguresPictures[props.currnetSpace.figure.color + props.currnetSpace.figure.name]}
-                    className={figureClassName}
-                    onClick={() => (props.currnetTurn === props.currnetSpace.figure.color ? props.setActiveFigure(props.x, props.y) : undefined)}
-                  />
+                    <Figure
+                        onClickFunc={() => (props.currnetTurn === props.currentSpace.figure.color ? props.setActiveFigure(props.x, props.y) : undefined)}
+                        figureColor={props.currentSpace.figure.color}
+                        figureName={props.currentSpace.figure.name}
+                        className={figureClassName}
+                    />
                 ) : <></>}
-      </div>
+        </div>
     );
 };
+
+Field.propTypes = {
+    currentSpace: PropTypes.shape({
+        color: PropTypes.string,
+        whiteThreat: PropTypes.arrayOf(
+            PropTypes.shape({
+                x: PropTypes.number,
+                y: PropTypes.number,
+                color: PropTypes.string,
+                name: PropTypes.string,
+                possibleMoves: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        x: PropTypes.number,
+                        y: PropTypes.number,
+                    }),
+                ),
+            }),
+        ),
+        blackThreat: PropTypes.arrayOf(
+            PropTypes.shape({
+                x: PropTypes.number,
+                y: PropTypes.number,
+                color: PropTypes.string,
+                name: PropTypes.string,
+                possibleMoves: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        x: PropTypes.number,
+                        y: PropTypes.number,
+                    }),
+                ),
+            }),
+        ),
+        figure: PropTypes.shape({
+            x: PropTypes.number,
+            y: PropTypes.number,
+            color: PropTypes.string,
+            isMoved: PropTypes.bool,
+            isThreaten: PropTypes.bool,
+            name: PropTypes.string,
+            finalPoint: PropTypes.number,
+            normalMoves: PropTypes.func,
+            takeMoves: PropTypes.func,
+            possibleMoves: PropTypes.arrayOf(
+                PropTypes.shape({
+                    x: PropTypes.number,
+                    y: PropTypes.number,
+                }),
+            ),
+        }),
+    }),
+    y: PropTypes.number,
+    x: PropTypes.number,
+    activeFigureCoordinates: PropTypes.shape({
+        x: PropTypes.number,
+        y: PropTypes.number,
+    }),
+    setActiveFigure: PropTypes.func,
+    possibleMoves: PropTypes.arrayOf(
+        PropTypes.shape({
+            x: PropTypes.number,
+            y: PropTypes.number,
+        }),
+    ),
+    moveTo: PropTypes.func,
+    lastMove: PropTypes.shape({
+        toX: PropTypes.number,
+        toY: PropTypes.number,
+        fromX: PropTypes.number,
+        fromY: PropTypes.number,
+        figureName: PropTypes.string,
+    }),
+    currnetTurn: PropTypes.string,
+};
+
+export default Field;

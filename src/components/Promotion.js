@@ -1,31 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import chessFiguresPictures from '../chessFiguresPictures';
+import Figure from './Figure';
 
-export default (props) => {
+const Promotion = (props) => {
     if (props.promotionMove) {
+        const figureClassName = 'figure cursor-pointer';
         return (
             <div className="promotion-bord">
                 <div className="promotion-figures">
-                    <img
-                        src={chessFiguresPictures[`${props.color}Queen`]}
-                        className="figure cursor-pointer"
-                        onClick={() => props.promotionPawn('Queen')}
+                    <Figure
+                        promotionPawn={() => props.promotionPawn('Queen')}
+                        figureName="Queen"
+                        figureColor={props.color}
+                        className={figureClassName}
                     />
-                    <img
-                        src={chessFiguresPictures[`${props.color}Bishop`]}
-                        className="figure cursor-pointer"
-                        onClick={() => props.promotionPawn('Bishop')}
+                    <Figure
+                        promotionPawn={() => props.promotionPawn('Bishop')}
+                        figureName="Bishop"
+                        figureColor={props.color}
+                        className={figureClassName}
                     />
-                    <img
-                        src={chessFiguresPictures[`${props.color}Knight`]}
-                        className="figure cursor-pointer"
-                        onClick={() => props.promotionPawn('Knight')}
+                    <Figure
+                        promotionPawn={() => props.promotionPawn('Knight')}
+                        figureName="Knight"
+                        figureColor={props.color}
+                        className={figureClassName}
                     />
-                    <img
-                        src={chessFiguresPictures[`${props.color}Rook`]}
-                        className="figure cursor-pointer"
-                        onClick={() => props.promotionPawn('Rook')}
+                    <Figure
+                        promotionPawn={() => props.promotionPawn('Rook')}
+                        figureName="Rook"
+                        figureColor={props.color}
+                        className={figureClassName}
                     />
                 </div>
             </div>
@@ -33,3 +39,11 @@ export default (props) => {
     }
     return <></>;
 };
+
+Promotion.propTypes = {
+    color: PropTypes.string,
+    promotionPawn: PropTypes.func,
+    promotionMove: PropTypes.bool,
+};
+
+export default Promotion;

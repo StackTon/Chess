@@ -82,6 +82,10 @@ export default class Figure {
                 return response;
             }
 
+            if (!utils.checkIfCordinatesAreValid(y, x)) {
+                return response;
+            }
+
             const currnetSpace = board.boardSpaces[y][x];
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
