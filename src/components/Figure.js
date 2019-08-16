@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import chessFiguresPictures from '../chessFiguresPictures';
+import chessFiguresPictures from '../utils/chessFiguresPictures';
 
 const Figure = (props) => (
     <img

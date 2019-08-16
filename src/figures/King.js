@@ -16,7 +16,7 @@ export default class King extends Figure {
         const currentY = this.y;
 
         // up left
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX - 1,
             y: currentY - 1,
@@ -26,7 +26,7 @@ export default class King extends Figure {
         });
 
         // up
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX,
             y: currentY - 1,
@@ -36,7 +36,7 @@ export default class King extends Figure {
         });
 
         // up right
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX + 1,
             y: currentY - 1,
@@ -46,7 +46,7 @@ export default class King extends Figure {
         });
 
         // right
-        const rightMove = Figure.canMoveToSpace({
+        const rightMove = this.canMoveToSpace({
             board,
             x: currentX + 1,
             y: currentY,
@@ -60,7 +60,7 @@ export default class King extends Figure {
 
             // right castlig
             if (rightRook.name === 'Rook' && rightRook.isMoved === false) {
-                Figure.canMoveToSpace({
+                this.canMoveToSpace({
                     board,
                     x: currentX + 2,
                     y: currentY,
@@ -72,7 +72,7 @@ export default class King extends Figure {
         }
 
         // down right
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX + 1,
             y: currentY + 1,
@@ -82,7 +82,7 @@ export default class King extends Figure {
         });
 
         // down
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX,
             y: currentY + 1,
@@ -92,7 +92,7 @@ export default class King extends Figure {
         });
 
         // down left
-        Figure.canMoveToSpace({
+        this.canMoveToSpace({
             board,
             x: currentX - 1,
             y: currentY + 1,
@@ -102,7 +102,7 @@ export default class King extends Figure {
         });
 
         // left
-        const leftMove = Figure.canMoveToSpace({
+        const leftMove = this.canMoveToSpace({
             board,
             x: currentX - 1,
             y: currentY,
@@ -114,7 +114,7 @@ export default class King extends Figure {
             const leftRook = board.boardSpaces[currentY][0].figure;
             // left castlig
             if (leftRook.name === 'Rook' && leftRook.isMoved === false) {
-                Figure.canMoveToSpace({
+                this.canMoveToSpace({
                     board,
                     x: currentX - 2,
                     y: currentY,
