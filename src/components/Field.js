@@ -1,24 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Figure from './Figure';
 
-import chessFiguresPictures from '../chessFiguresPictures';
-
 const Field = (props) => {
+    const { currentSpace, currnetTurn, lastMove } = props;
+    const figureName = currentSpace.figure.name;
+    const figureColor = currentSpace.figure.color;
+
     let isThisPossibleMove = false;
     let figureClassName = 'figure';
-    let spaceClassName = `field ${props.currentSpace.color}`;
+    let spaceClassName = `field ${currentSpace.color}`;
 
-    if (props.x === props.activeFigureCoordinates.x && props.y === props.activeFigureCoordinates.y) {
+    const checkIfXIsActive = props.x === props.activeFigureCoordinates.x;
+    const checkIfYIsActive = props.y === props.activeFigureCoordinates.y;
+    if (checkIfXIsActive && checkIfYIsActive) {
         figureClassName += ' active-figure';
     }
 
-    if (props.currentSpace.figure.name === 'King' && ((props.currentSpace.blackThreat.length > 0 && props.currentSpace.figure.color === 'white') || (props.currentSpace.whiteThreat.length > 0 && props.currentSpace.figure.color === 'black'))) {
+    const checkIfWhiteThreatenThisSpace = figureColor === 'white' && currentSpace.blackThreat.length > 0;
+    const checkIfBlackThreatenThisSpace = figureColor === 'black' && currentSpace.whiteThreat.length > 0;
+    const checkIfKingIsThreaten = checkIfWhiteThreatenThisSpace || checkIfBlackThreatenThisSpace;
+    if (figureName === 'King' && checkIfKingIsThreaten) {
         figureClassName += ' threaten-king';
     }
 
-    if (props.currentSpace.figure.color === props.currnetTurn) {
+    if (figureColor === currnetTurn) {
         figureClassName += ' cursor-pointer';
     }
 
@@ -30,24 +36,33 @@ const Field = (props) => {
         }
     }
 
-    if ((props.lastMove.fromX === props.x && props.lastMove.fromY === props.y) || (props.lastMove.toX === props.x && props.lastMove.toY === props.y)) {
+    const checkForLastToMove = lastMove.toX === props.x && lastMove.toY === props.y;
+    const checkForLastFromMove = lastMove.fromX === props.x && lastMove.fromY === props.y;
+    const checkForLastMove = checkForLastToMove || checkForLastFromMove;
+    if (checkForLastMove) {
         spaceClassName += ' lastMove';
     }
 
+    const spaceClickFunc = () => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined);
     return (
         <div
             className={spaceClassName}
-            onClick={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}
-            onKeyUp={() => (isThisPossibleMove ? props.moveTo(props.x, props.y) : undefined)}
+            onClick={spaceClickFunc}
+            onKeyUp={spaceClickFunc}
             role="button"
         >
             {isThisPossibleMove ? <div className="possible-move" /> : <></>}
-            {chessFiguresPictures[props.currentSpace.figure.color + props.currentSpace.figure.name]
+            {figureName
                 ? (
                     <Figure
-                        onClickFunc={() => (props.currnetTurn === props.currentSpace.figure.color ? props.setActiveFigure(props.x, props.y) : undefined)}
-                        figureColor={props.currentSpace.figure.color}
-                        figureName={props.currentSpace.figure.name}
+                        onClickFunc={() => {
+                            if (currnetTurn === figureColor) {
+                                return props.setActiveFigure(props.x, props.y);
+                            }
+                            return undefined;
+                        }}
+                        figureColor={figureColor}
+                        figureName={figureName}
                         className={figureClassName}
                     />
                 ) : <></>}
