@@ -8,23 +8,27 @@ export default class Figure {
         this.possibleMoves = [];
     }
 
-    static canMoveToSpace({ board, x, y, color, moves, checkForColor }) {
+    static canMoveToSpace({ board, x, y, color, checkForColor }) {
+        const response = {
+            canMoveToSpace: false,
+            lastMove: false,
+        };
+
         if (!utils.checkIfCordinatesAreValid(x, y)) {
-            return false;
+            return response;
         }
 
         const { figure } = board.boardSpaces[y][x];
 
         if (checkForColor === true && !utils.checkForColorDifrence(figure.color, color)) {
-            return false;
+            return response;
         }
-
+        response.canMoveToSpace = true;
         if (Object.keys(figure).length !== 0) {
-            moves.push({ x, y });
-            return false;
+            response.lastMove = true;
+            return response;
         }
-        moves.push({ x, y });
-        return true;
+        return response;
     }
 
     static isPinned(board, king, fromX, fromY) {
@@ -203,9 +207,11 @@ export default class Figure {
         }
     }
 
-    bishopMoves(board, checkForColor, moves) {
+    bishopMoves(board, checkForColor) {
         const currentX = this.x;
         const currentY = this.y;
+
+        const moves = [];
 
         let upLeftMove = true;
         let upRightMove = true;
@@ -215,121 +221,212 @@ export default class Figure {
         for (let i = 1; i <= 8; i++) {
             // up left moves
             if (upLeftMove) {
-                upLeftMove = this.constructor.canMoveToSpace({
+                const upLeftY = currentY - i;
+                const upLeftX = currentX - i;
+
+                const response = this.constructor.canMoveToSpace({
                     board,
-                    x: currentX - i,
-                    y: currentY - i,
+                    x: upLeftX,
+                    y: upLeftY,
                     color: this.color,
-                    moves,
                     checkForColor,
                 });
+
+                upLeftMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: upLeftX, y: upLeftY });
+                    upLeftMove = !response.lastMove;
+                }
             }
 
             // up right moves
             if (upRightMove) {
-                upRightMove = this.constructor.canMoveToSpace({
+                const upRightY = currentY - i;
+                const upRightX = currentX + i;
+
+                const response = this.constructor.canMoveToSpace({
                     board,
-                    x: currentX + i,
-                    y: currentY - i,
+                    x: upRightX,
+                    y: upRightY,
                     color: this.color,
-                    moves,
                     checkForColor,
                 });
+
+                upRightMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: upRightX, y: upRightY });
+                    upRightMove = !response.lastMove;
+                }
             }
 
             // down right moves
             if (downRightMove) {
-                downRightMove = this.constructor.canMoveToSpace({
+                const downRightY = currentY + i;
+                const downRightX = currentX + i;
+
+                const response = this.constructor.canMoveToSpace({
                     board,
-                    x: currentX + i,
-                    y: currentY + i,
+                    x: downRightX,
+                    y: downRightY,
                     color: this.color,
-                    moves,
                     checkForColor,
                 });
+
+                downRightMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: downRightX, y: downRightY });
+                    downRightMove = !response.lastMove;
+                }
             }
 
             // down left moves
             if (downLeftMove) {
-                downLeftMove = this.constructor.canMoveToSpace({
+                const downLeftY = currentY + i;
+                const downLefttX = currentX - i;
+
+                const response = this.constructor.canMoveToSpace({
                     board,
-                    x: currentX - i,
-                    y: currentY + i,
+                    x: downLefttX,
+                    y: downLeftY,
                     color: this.color,
-                    moves,
                     checkForColor,
                 });
+
+                downLeftMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: downLefttX, y: downLeftY });
+                    downLeftMove = !response.lastMove;
+                }
             }
 
             if (!upLeftMove && !upRightMove && !downRightMove && !downLeftMove) {
                 break;
             }
         }
+
+        return moves;
     }
 
-    rookMoves(board, checkForColor, moves) {
+    rookMoves(board, checkForColor) {
         const currentX = this.x;
         const currentY = this.y;
 
-        // up moves
-        for (let i = currentY - 1; i >= 0; i--) {
-            const currnetMove = this.constructor.canMoveToSpace({
-                board,
-                x: currentX,
-                y: i,
-                color: this.color,
-                moves,
-                checkForColor,
-            });
-            if (!currnetMove) {
+        const moves = [];
+
+        let upMove = true;
+        let rightMove = true;
+        let downMove = true;
+        let leftMove = true;
+
+        for (let i = 1; i <= 8; i++) {
+            // up moves
+            if (upMove) {
+                const upY = currentY - i;
+                const upX = currentX;
+
+                const response = this.constructor.canMoveToSpace({
+                    board,
+                    x: upX,
+                    y: upY,
+                    color: this.color,
+                    checkForColor,
+                });
+
+                upMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: upX, y: upY });
+                    upMove = !response.lastMove;
+                }
+            }
+
+            // right moves
+            if (rightMove) {
+                const rightY = currentY;
+                const rightX = currentX + i;
+
+                const response = this.constructor.canMoveToSpace({
+                    board,
+                    x: rightX,
+                    y: rightY,
+                    color: this.color,
+                    checkForColor,
+                });
+
+                rightMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: rightX, y: rightY });
+                    rightMove = !response.lastMove;
+                }
+            }
+
+            // down moves
+            if (downMove) {
+                const downY = currentY + i;
+                const downX = currentX;
+
+                const response = this.constructor.canMoveToSpace({
+                    board,
+                    x: downX,
+                    y: downY,
+                    color: this.color,
+                    checkForColor,
+                });
+
+                downMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: downX, y: downY });
+                    downMove = !response.lastMove;
+                }
+            }
+
+            // left moves
+            if (leftMove) {
+                const leftY = currentY;
+                const leftX = currentX - i;
+
+                const response = this.constructor.canMoveToSpace({
+                    board,
+                    x: leftX,
+                    y: leftY,
+                    color: this.color,
+                    checkForColor,
+                });
+
+                leftMove = response.canMoveToSpace;
+
+                if (response.canMoveToSpace) {
+                    moves.push({ x: leftX, y: leftY });
+                    leftMove = !response.lastMove;
+                }
+            }
+
+            if (!upMove && !rightMove && !downMove && !leftMove) {
                 break;
             }
         }
 
-        // right moves
-        for (let i = currentX + 1; i < 8; i++) {
-            const currnetMove = this.constructor.canMoveToSpace({
-                board,
-                x: i,
-                y: currentY,
-                color: this.color,
-                moves,
-                checkForColor,
-            });
-            if (!currnetMove) {
-                break;
-            }
+        return moves;
+    }
+
+    checkIfSpaceContainsFigure(board, x, y) {
+        if (!utils.checkIfCordinatesAreValid(x, y)) {
+            return false;
         }
 
-        // down moves
-        for (let i = currentY + 1; i < 8; i++) {
-            const currnetMove = this.constructor.canMoveToSpace({
-                board,
-                x: currentX,
-                y: i,
-                color: this.color,
-                moves,
-                checkForColor,
-            });
-            if (!currnetMove) {
-                break;
-            }
+        const { figure } = board.boardSpaces[y][x];
+
+        if (Object.keys(figure).length === 0) {
+            return false;
         }
 
-        // left moves
-        for (let i = currentX - 1; i >= 0; i--) {
-            const currnetMove = this.constructor.canMoveToSpace({
-                board,
-                x: i,
-                y: currentY,
-                color: this.color,
-                moves,
-                checkForColor,
-            });
-            if (!currnetMove) {
-                break;
-            }
-        }
+        return true;
     }
 
     isThisSpaceThreaten(board, x, y) {

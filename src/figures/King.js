@@ -55,22 +55,6 @@ export default class King extends Figure {
             checkForColor,
         });
 
-        if (this.isMoved === false && rightMove === true && Object.keys(board.boardSpaces[currentY][6].figure).length === 0) {
-            const rightRook = board.boardSpaces[currentY][7].figure;
-
-            // right castlig
-            if (rightRook.name === 'Rook' && rightRook.isMoved === false) {
-                this.canMoveToSpace({
-                    board,
-                    x: currentX + 2,
-                    y: currentY,
-                    color: this.color,
-                    moves,
-                    checkForColor,
-                });
-            }
-        }
-
         // down right
         this.canMoveToSpace({
             board,
@@ -110,25 +94,45 @@ export default class King extends Figure {
             moves,
             checkForColor,
         });
-        if (this.isMoved === false && leftMove === true && Object.keys(board.boardSpaces[currentY][1].figure).length === 0) {
-            const leftRook = board.boardSpaces[currentY][0].figure;
-            // left castlig
-            if (leftRook.name === 'Rook' && leftRook.isMoved === false) {
-                this.canMoveToSpace({
-                    board,
-                    x: currentX - 2,
-                    y: currentY,
-                    color: this.color,
-                    moves,
-                    checkForColor,
-                });
+
+        if (this.isMoved === false) {
+            if (rightMove && Object.keys(board.boardSpaces[currentY][6].figure).length === 0) {
+                const rightRook = board.boardSpaces[currentY][7].figure;
+
+                // right castlig
+                if (rightRook.name === 'Rook' && rightRook.isMoved === false) {
+                    this.canMoveToSpace({
+                        board,
+                        x: currentX + 2,
+                        y: currentY,
+                        color: this.color,
+                        moves,
+                        checkForColor,
+                    });
+                }
+            }
+
+            if (leftMove && Object.keys(board.boardSpaces[currentY][1].figure).length === 0) {
+                const leftRook = board.boardSpaces[currentY][0].figure;
+
+                // left castlig
+                if (leftRook.name === 'Rook' && leftRook.isMoved === false) {
+                    this.canMoveToSpace({
+                        board,
+                        x: currentX - 2,
+                        y: currentY,
+                        color: this.color,
+                        moves,
+                        checkForColor,
+                    });
+                }
             }
         }
 
         return moves;
     }
 
-    canMoveToSpace({ board, x, y, color, moves, checkForColor: checkForColor = true }) {
+    canMoveToSpace({ board, x, y, color, moves, checkForColor = true }) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }

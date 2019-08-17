@@ -7,12 +7,11 @@ export default class Rook extends Figure {
         this.isMoved = false;
     }
 
-    figureMoves(board, checkForColor = true, king) {
-        const moves = [];
+    figureMoves(board, checkForColor, king) {
         const currentX = this.x;
         const currentY = this.y;
 
-        this.rookMoves(board, checkForColor, moves);
+        const moves = this.rookMoves(board, checkForColor);
 
         if (checkForColor) {
             const response = Figure.isPinned(board, king, currentX, currentY);

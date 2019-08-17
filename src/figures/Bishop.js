@@ -7,11 +7,10 @@ export default class Bishop extends Figure {
     }
 
     figureMoves(board, checkForColor = true, king) {
-        const moves = [];
         const currentX = this.x;
         const currentY = this.y;
 
-        this.bishopMoves(board, checkForColor, moves, super.canMoveToSpace);
+        const moves = this.bishopMoves(board, checkForColor);
 
         if (checkForColor) {
             const response = Figure.isPinned(board, king, currentX, currentY);

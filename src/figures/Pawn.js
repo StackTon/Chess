@@ -121,7 +121,7 @@ export default class Pawn extends Figure {
         return moves;
     }
 
-    static canMoveToSpace({ board, x, y, color, moves, sideMove: sideMove = false, frontMove: frontMove = false }) {
+    static canMoveToSpace({ board, x, y, color, moves, sideMove = false, frontMove = false }) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
             return false;
         }
