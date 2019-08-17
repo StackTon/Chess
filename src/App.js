@@ -117,7 +117,7 @@ export default class App extends Component {
 
                         if (Object.keys(currentSpace.figure).length !== 0) {
                             return kingX === move.x && kingY === move.y;
-                        } if (kingX === move.x && y === move.y) {
+                        } if (kingX === move.x && kingY === move.y) {
                             return true;
                         }
                     }
