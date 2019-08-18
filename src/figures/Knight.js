@@ -12,85 +12,33 @@ export default class Knight extends Figure {
         const currentX = this.x;
         const currentY = this.y;
 
-        // up left move
-        Figure.canMoveToSpace({
+        const requset = {
             board,
-            x: currentX - 1,
-            y: currentY - 2,
+            x: currentX,
+            y: currentY,
             color: this.color,
-            moves,
             checkForColor,
-        });
+        };
 
-        // up right move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX + 1,
-            y: currentY - 2,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
+        const knightMoves = [
+            { x: -1, y: -2 },
+            { x: 1, y: -2 },
+            { x: 2, y: -1 },
+            { x: 2, y: 1 },
+            { x: 1, y: 2 },
+            { x: -1, y: 2 },
+            { x: -2, y: 1 },
+            { x: -2, y: -1 },
+        ];
 
-        // right up move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX + 2,
-            y: currentY - 1,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
-
-        // righy down move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX + 2,
-            y: currentY + 1,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
-
-        // down left move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX + 1,
-            y: currentY + 2,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
-
-        // down right move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX - 1,
-            y: currentY + 2,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
-
-        // left down move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX - 2,
-            y: currentY + 1,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
-
-        // left up move
-        Figure.canMoveToSpace({
-            board,
-            x: currentX - 2,
-            y: currentY - 1,
-            color: this.color,
-            moves,
-            checkForColor,
-        });
+        for (const { x, y } of knightMoves) {
+            this.canMoveToSpaceRequest({
+                requset,
+                moves,
+                x,
+                y,
+            });
+        }
 
         if (checkForColor) {
             const response = Figure.isPinned(board, king, currentX, currentY);
@@ -98,5 +46,14 @@ export default class Knight extends Figure {
         }
 
         return moves;
+    }
+
+    canMoveToSpaceRequest({ requset, moves, x, y }) {
+        const req = requset;
+        req.x = this.x + x;
+        req.y = this.y + y;
+        if (Figure.canMoveToSpace(req).canMoveToSpace) {
+            moves.push({ x: req.x, y: req.y });
+        }
     }
 }
