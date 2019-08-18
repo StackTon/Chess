@@ -63,77 +63,8 @@ export default class App extends Component {
             this.clearActiveFigureAndPossibleMoves();
         } else {
             const currnetFigure = this.state.board.boardSpaces[y][x].figure;
-            let { possibleMoves } = currnetFigure;
+            const { possibleMoves } = currnetFigure;
 
-            if (currnetFigure.name === 'King' && possibleMoves.length === 0) {
-                // TODO check all other figures moves if they can't move it's stale mate
-            }
-
-            // check if the king is in check
-            const kingCoordinates = this.state[`${currnetFigure.color}King`];
-            const opositeColor = currnetFigure.color === 'black' ? 'white' : 'black';
-            const threatFigures = this.state.board.boardSpaces[kingCoordinates.y][kingCoordinates.x][`${opositeColor}Threat`];
-            if (threatFigures.length === 1 && currnetFigure.name !== 'King') {
-                const threatFigureX = threatFigures[0].x;
-                const threatFigureY = threatFigures[0].y;
-                possibleMoves = possibleMoves.filter((move) => {
-                    if (threatFigures[0].name === 'Knight' || threatFigures[0].name === 'Pawn') {
-                        return move.x === threatFigureX && move.y === threatFigureY;
-                    }
-                    let kingX = kingCoordinates.x;
-                    let kingY = kingCoordinates.y;
-                    for (let i = 1; i <= 8; i++) {
-                        if (threatFigureX === kingCoordinates.x) { // check up and down
-                            if (kingCoordinates.y > threatFigureY) { // down
-                                kingY -= 1;
-                            } else if (kingCoordinates.y < threatFigureY) { // up
-                                kingY += 1;
-                            }
-                        } else if (threatFigureY === kingCoordinates.y) { // check rigth and left check
-                            if (kingCoordinates.x > threatFigureX) { // left
-                                kingX -= 1;
-                            } else if (kingCoordinates.x < threatFigureX) { // rigth
-                                kingX += 1;
-                            }
-                        } else if (threatFigureX - threatFigureY === kingCoordinates.x - kingCoordinates.y && threatFigureY - threatFigureX === kingCoordinates.y - kingCoordinates.x) { // check up left and right down diagonal
-                            if (kingCoordinates.y > threatFigureY) { // up left
-                                kingX -= 1;
-                                kingY -= 1;
-                            } else if (kingCoordinates.y < threatFigureY) { // right down
-                                kingX += 1;
-                                kingY += 1;
-                            }
-                        } else if (threatFigureX + threatFigureY === kingCoordinates.x + kingCoordinates.y) { // check up right and down left diagonal
-                            if (kingCoordinates.y > threatFigureY) { // up right
-                                kingX += 1;
-                                kingY -= 1;
-                            } else if (kingCoordinates.y < threatFigureY) { // down left
-                                kingX -= 1;
-                                kingY += 1;
-                            }
-                        }
-
-                        const currentSpace = this.state.board.boardSpaces[kingY][kingX];
-
-                        if (Object.keys(currentSpace.figure).length !== 0) {
-                            return kingX === move.x && kingY === move.y;
-                        } if (kingX === move.x && kingY === move.y) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-            } else if (threatFigures.length === 2) {
-                const possibleKingMoves = this.state.board[kingCoordinates.y][kingCoordinates.x].figure.possibleMoves;
-                if (possibleKingMoves.length === 0) {
-                    // TODO handle MATE
-                    this.setState({ currnetTurn: 'mate' });
-                }
-
-                if (currnetFigure !== 'King') {
-                    possibleMoves = [];
-                }
-            }
             this.setState({ possibleMoves, activeFigureCoordinates: { x, y } });
         }
     }
@@ -182,22 +113,19 @@ export default class App extends Component {
             this.setState({ promotionMove: { x, y, promotion: true, color: currnetFigure.color } });
         }
 
-        this.setState((state) => ({
-            lastMove: {
+        this.setState((state) => {
+            const { boardSpaces } = state.board;
+            let { lastMove } = state;
+            boardSpaces[y][x].figure = currnetFigure;
+            boardSpaces[state.activeFigureCoordinates.y][state.activeFigureCoordinates.x].figure = {};
+            lastMove = {
                 fromX: state.activeFigureCoordinates.x,
                 fromY: state.activeFigureCoordinates.y,
                 toX: x,
                 toY: y,
                 figureName: currnetFigure.name,
-            },
-        }));
-
-
-        this.setState((state) => {
-            const { boardSpaces } = state.board;
-            boardSpaces[y][x].figure = currnetFigure;
-            boardSpaces[state.activeFigureCoordinates.y][state.activeFigureCoordinates.x].figure = {};
-            return boardSpaces;
+            };
+            return { boardSpaces, lastMove };
         });
 
         currnetFigure.x = x;
