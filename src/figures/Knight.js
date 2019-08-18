@@ -1,9 +1,10 @@
 import Figure from './Figure';
+import constants from '../utils/constants';
 
 export default class Knight extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
-        this.name = 'Knight';
+        this.name = constants.KNIGHT;
         this.isMoved = false;
     }
 

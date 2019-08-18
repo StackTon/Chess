@@ -1,4 +1,5 @@
 import utils from '../utils/utils';
+import constants from '../utils/constants';
 
 export default class Figure {
     constructor(color, x, y) {
@@ -158,12 +159,12 @@ export default class Figure {
             }
 
             if (Object.keys(currnetSpace.figure).length !== 0) {
-                if (isStraightMove && (currnetSpace.figure.name === 'Queen' || currnetSpace.figure.name === 'Rook') && currentFigureColor !== currnetSpace.figure.color) {
+                if (isStraightMove && (currnetSpace.figure.name === constants.QUEEN || currnetSpace.figure.name === constants.ROOK) && currentFigureColor !== currnetSpace.figure.color) {
                     response.isPinned = true;
                     response.possibleMoves = possibleMoves;
                     return response;
                 }
-                if (!isStraightMove && (currnetSpace.figure.name === 'Queen' || currnetSpace.figure.name === 'Bishop') && currentFigureColor !== currnetSpace.figure.color) {
+                if (!isStraightMove && (currnetSpace.figure.name === constants.QUEEN || currnetSpace.figure.name === constants.BISHOP) && currentFigureColor !== currnetSpace.figure.color) {
                     response.isPinned = true;
                     response.possibleMoves = possibleMoves;
                     return response;
@@ -195,13 +196,13 @@ export default class Figure {
 
         // check if the king is in check
         const kingCoordinates = king;
-        const opositeColor = this.color === 'black' ? 'white' : 'black';
+        const opositeColor = this.color === constants.BLACK ? constants.WHITE : constants.BLACK;
         const threatFigures = board.boardSpaces[kingCoordinates.y][kingCoordinates.x][`${opositeColor}Threat`];
-        if (threatFigures.length === 1 && this.name !== 'King') {
+        if (threatFigures.length === 1 && this.name !== constants.KING) {
             const threatFigureX = threatFigures[0].x;
             const threatFigureY = threatFigures[0].y;
             moves = moves.filter((move) => {
-                if (threatFigures[0].name === 'Knight' || threatFigures[0].name === 'Pawn') {
+                if (threatFigures[0].name === constants.KNIGHT || threatFigures[0].name === constants.PAWN) {
                     return move.x === threatFigureX && move.y === threatFigureY;
                 }
                 let kingX = kingCoordinates.x;
@@ -253,7 +254,7 @@ export default class Figure {
                 // TODO handle MATE
             }
 
-            if (this.name !== 'King') {
+            if (this.name !== constants.KING) {
                 moves = [];
             }
         }
@@ -263,9 +264,9 @@ export default class Figure {
         } else {
             for (const move of moves) {
                 const space = board.boardSpaces[move.y][move.x];
-                if (this.color === 'black') {
+                if (this.color === constants.BLACK) {
                     space.blackThreat.push(this);
-                } else if (this.color === 'white') {
+                } else if (this.color === constants.WHITE) {
                     space.whiteThreat.push(this);
                 }
             }
@@ -497,7 +498,7 @@ export default class Figure {
     isThisSpaceThreaten(board, x, y) {
         const space = board.boardSpaces[y][x];
 
-        if (this.color === 'black') {
+        if (this.color === constants.BLACK) {
             return space.whiteThreat.length > 0;
         }
         return space.blackThreat.length > 0;

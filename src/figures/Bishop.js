@@ -1,9 +1,10 @@
 import Figure from './Figure';
+import constants from '../utils/constants';
 
 export default class Bishop extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
-        this.name = 'Bishop';
+        this.name = constants.BISHOP;
     }
 
     figureMoves(board, checkForColor = true, king) {

@@ -1,11 +1,11 @@
 import Figure from './Figure';
-
 import utils from '../utils/utils';
+import constants from '../utils/constants';
 
 export default class King extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
-        this.name = 'King';
+        this.name = constants.KING;
         this.isMoved = false;
         this.isThreaten = false;
     }

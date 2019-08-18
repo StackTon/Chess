@@ -1,9 +1,10 @@
 import Figure from './Figure';
+import constants from '../utils/constants';
 
 export default class Rook extends Figure {
     constructor(color, x, y) {
         super(color, x, y);
-        this.name = 'Rook';
+        this.name = constants.ROOK;
         this.isMoved = false;
     }
 

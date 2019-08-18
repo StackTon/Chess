@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Figure from './Figure';
+import constants from '../utils/constants';
 
 const Field = (props) => {
     const { currentSpace, currnetTurn, lastMove } = props;
@@ -17,10 +18,10 @@ const Field = (props) => {
         figureClassName += ' active-figure';
     }
 
-    const checkIfWhiteThreatenThisSpace = figureColor === 'white' && currentSpace.blackThreat.length > 0;
-    const checkIfBlackThreatenThisSpace = figureColor === 'black' && currentSpace.whiteThreat.length > 0;
+    const checkIfWhiteThreatenThisSpace = figureColor === constants.WHITE && currentSpace.blackThreat.length > 0;
+    const checkIfBlackThreatenThisSpace = figureColor === constants.BLACK && currentSpace.whiteThreat.length > 0;
     const checkIfKingIsThreaten = checkIfWhiteThreatenThisSpace || checkIfBlackThreatenThisSpace;
-    if (figureName === 'King' && checkIfKingIsThreaten) {
+    if (figureName === constants.KING && checkIfKingIsThreaten) {
         figureClassName += ' threaten-king';
     }
 

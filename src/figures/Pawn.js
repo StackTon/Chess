@@ -1,11 +1,11 @@
 import Figure from './Figure';
-
 import utils from '../utils/utils';
+import constants from '../utils/constants';
 
 export default class Pawn extends Figure {
     constructor(color, x, y, finalPoint) {
         super(color, x, y);
-        this.name = 'Pawn';
+        this.name = constants.PAWN;
         this.finalPoint = finalPoint;
         this.isMoved = false;
     }

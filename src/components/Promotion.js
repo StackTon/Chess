@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Figure from './Figure';
+import constants from '../utils/constants';
 
 const Promotion = (props) => {
     if (props.promotionMove) {
@@ -10,26 +10,26 @@ const Promotion = (props) => {
             <div className="promotion-bord">
                 <div className="promotion-figures">
                     <Figure
-                        promotionPawn={() => props.promotionPawn('Queen')}
-                        figureName="Queen"
+                        promotionPawn={() => props.promotionPawn(constants.QUEEN)}
+                        figureName={constants.QUEEN}
                         figureColor={props.color}
                         className={figureClassName}
                     />
                     <Figure
-                        promotionPawn={() => props.promotionPawn('Bishop')}
-                        figureName="Bishop"
+                        promotionPawn={() => props.promotionPawn(constants.BISHOP)}
+                        figureName={constants.BISHOP}
                         figureColor={props.color}
                         className={figureClassName}
                     />
                     <Figure
-                        promotionPawn={() => props.promotionPawn('Knight')}
-                        figureName="Knight"
+                        promotionPawn={() => props.promotionPawn(constants.KNIGHT)}
+                        figureName={constants.KNIGHT}
                         figureColor={props.color}
                         className={figureClassName}
                     />
                     <Figure
-                        promotionPawn={() => props.promotionPawn('Rook')}
-                        figureName="Rook"
+                        promotionPawn={() => props.promotionPawn(constants.ROOK)}
+                        figureName={constants.ROOK}
                         figureColor={props.color}
                         className={figureClassName}
                     />
