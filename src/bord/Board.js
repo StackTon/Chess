@@ -8,6 +8,8 @@ import Rook from '../figures/Rook';
 import Queen from '../figures/Queen';
 import King from '../figures/King';
 
+import constatns from '../utils/constants';
+
 export default class Board {
     constructor() {
         // super(this);
@@ -18,19 +20,18 @@ export default class Board {
             for (let col = 0; col < 8; col++) {
                 let spaceColor;
                 if ((row + col) % 2 === 0) {
-                    spaceColor = 'white';
+                    spaceColor = constatns.WHITE;
                 } else {
-                    spaceColor = 'black';
+                    spaceColor = constatns.BLACK;
                 }
 
                 let newFigire;
-
                 let figureColor;
 
                 if (row === 0) {
-                    figureColor = 'black';
+                    figureColor = constatns.BLACK;
                 } else if (row === 7) {
-                    figureColor = 'white';
+                    figureColor = constatns.WHITE;
                 }
 
                 if (row === 0 || row === 7) { // black
@@ -46,9 +47,9 @@ export default class Board {
                         newFigire = new King(figureColor, col, row);
                     }
                 } else if (row === 1) {
-                    newFigire = new Pawn('black', col, row, 7);
+                    newFigire = new Pawn(constatns.BLACK, col, row, 7);
                 } else if (row === 6) { // white
-                    newFigire = new Pawn('white', col, row, 0);
+                    newFigire = new Pawn(constatns.WHITE, col, row, 0);
                 } else {
                     newFigire = {};
                 }

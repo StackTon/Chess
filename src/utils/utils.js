@@ -27,8 +27,91 @@ function returnEqualElemetsFromTwoArrays(arr1, arr2) {
     return arr;
 }
 
+function checkIfTwoPointsAreOnTheSameLine(x1, y1, x2, y2) {
+    if (x1 === x2) {
+        return true;
+    }
+    if (y1 === y2) {
+        return true;
+    }
+    if (x1 + y1 === x2 + y2) {
+        return true;
+    }
+    if (x1 - y1 === x2 - y2 && y1 - x1 === y2 - x2) {
+        return true;
+    }
+
+    return false;
+}
+
+function getAllPointsBetweenTwoPoints(x1, y1, x2, y2) {
+    const moves = [];
+
+    let x = x1;
+    let y = y1;
+    for (let i = 0; i < 7; i++) {
+        // down
+        if (x1 === x2 && y1 > y2) {
+            y -= 1;
+        }
+
+        // up
+        if (x1 === x2 && y1 < y2) {
+            y += 1;
+        }
+
+        // right
+        if (y1 === y2 && x1 > x2) {
+            x += 1;
+        }
+
+        // left
+        if (y1 === y2 && x1 < x2) {
+            x -= 1;
+        }
+
+        // up left
+        if (x1 - y1 === x2 - y2 && y1 - x1 === y2 - x2 && y1 > y2) {
+            x -= 1;
+            y -= 1;
+        }
+
+        // right down
+        if (x1 - y1 === x2 - y2 && y1 - x1 === y2 - x2 && y1 < y2) {
+            x += 1;
+            y += 1;
+        }
+
+        // up right
+        if (x1 + y1 === x2 + y2 && y1 > y2) {
+            x += 1;
+            y -= 1;
+        }
+
+        // down left
+        if (x1 + y1 === x2 + y2 && y1 < y2) {
+            x -= 1;
+            y += 1;
+        }
+
+        if (!checkIfCordinatesAreValid(x, y)) {
+            return moves;
+        }
+
+        moves.push({ x, y });
+
+        if (x === x2 && y === y2) {
+            return moves;
+        }
+    }
+
+    return moves;
+}
+
 export default {
     checkIfCordinatesAreValid,
     checkForColorDifrence,
     returnEqualElemetsFromTwoArrays,
+    checkIfTwoPointsAreOnTheSameLine,
+    getAllPointsBetweenTwoPoints,
 };

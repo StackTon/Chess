@@ -42,7 +42,7 @@ export default class Knight extends Figure {
         }
 
         if (checkForColor) {
-            const response = Figure.isPinned(board, king, currentX, currentY);
+            const response = Figure.isPinned(board, king, currentX, currentY, this.color);
             return Figure.handerIsPinnedResponse(response, moves);
         }
 

@@ -14,7 +14,7 @@ export default class Bishop extends Figure {
         const moves = this.bishopMoves(board, checkForColor);
 
         if (checkForColor) {
-            const response = Figure.isPinned(board, king, currentX, currentY);
+            const response = Figure.isPinned(board, king, currentX, currentY, this.color);
             return Figure.handerIsPinnedResponse(response, moves);
         }
 
