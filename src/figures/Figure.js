@@ -80,68 +80,22 @@ export default class Figure {
         const opositeColor = this.color === constants.BLACK ? constants.WHITE : constants.BLACK;
         const threatFigures = board.boardSpaces[kingCoordinates.y][kingCoordinates.x][`${opositeColor}Threat`];
         if (threatFigures.length === 1 && this.name !== constants.KING) {
-            const threatFigureX = threatFigures[0].x;
-            const threatFigureY = threatFigures[0].y;
-            moves = moves.filter((move) => {
-                if (threatFigures[0].name === constants.KNIGHT || threatFigures[0].name === constants.PAWN) {
-                    return move.x === threatFigureX && move.y === threatFigureY;
-                }
-                let kingX = kingCoordinates.x;
-                let kingY = kingCoordinates.y;
-                for (let i = 1; i <= 8; i++) {
-                    if (threatFigureX === kingCoordinates.x) { // check up and down
-                        if (kingCoordinates.y > threatFigureY) { // down
-                            kingY -= 1;
-                        } else if (kingCoordinates.y < threatFigureY) { // up
-                            kingY += 1;
-                        }
-                    } else if (threatFigureY === kingCoordinates.y) { // check rigth and left check
-                        if (kingCoordinates.x > threatFigureX) { // left
-                            kingX -= 1;
-                        } else if (kingCoordinates.x < threatFigureX) { // rigth
-                            kingX += 1;
-                        }
-                    } else if (threatFigureX - threatFigureY === kingCoordinates.x - kingCoordinates.y && threatFigureY - threatFigureX === kingCoordinates.y - kingCoordinates.x) { // check up left and right down diagonal
-                        if (kingCoordinates.y > threatFigureY) { // up left
-                            kingX -= 1;
-                            kingY -= 1;
-                        } else if (kingCoordinates.y < threatFigureY) { // right down
-                            kingX += 1;
-                            kingY += 1;
-                        }
-                    } else if (threatFigureX + threatFigureY === kingCoordinates.x + kingCoordinates.y) { // check up right and down left diagonal
-                        if (kingCoordinates.y > threatFigureY) { // up right
-                            kingX += 1;
-                            kingY -= 1;
-                        } else if (kingCoordinates.y < threatFigureY) { // down left
-                            kingX -= 1;
-                            kingY += 1;
-                        }
-                    }
+            const threatFigure = threatFigures[0];
+            let stopCheckMoves = [];
 
-                    const currentSpace = board.boardSpaces[kingY][kingX];
-
-                    if (Object.keys(currentSpace.figure).length !== 0) {
-                        return kingX === move.x && kingY === move.y;
-                    } if (kingX === move.x && kingY === move.y) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-        } else if (threatFigures.length === 2) {
-            const possibleKingMoves = board.boardSpaces[kingCoordinates.y][kingCoordinates.x].figure.possibleMoves;
-            if (possibleKingMoves.length === 0) {
-                // TODO handle MATE
+            if (threatFigures[0].name === constants.KNIGHT || threatFigures[0].name === constants.PAWN) {
+                stopCheckMoves.push({ x: threatFigure.x, y: threatFigure.y });
+            } else {
+                const request = [kingCoordinates.x, kingCoordinates.y, threatFigure.x, threatFigure.y];
+                stopCheckMoves = utils.getAllPointsBetweenTwoPoints(...request);
             }
 
-            if (this.name !== constants.KING) {
-                moves = [];
-            }
+            moves = utils.returnEqualElemetsFromTwoArrays(moves, stopCheckMoves);
         }
 
         if (checkForColor) {
             this.possibleMoves = moves;
+            board[`${this.color}MovesCount`] += moves.length;
         } else {
             for (const move of moves) {
                 const space = board.boardSpaces[move.y][move.x];
