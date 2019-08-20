@@ -188,9 +188,14 @@ export default class App extends Component {
     }
 
     calculatePossibleMovesForAllFigures() {
+        this.state.board.resetMovesCount();
         this.cleanBlackAndWhiteThreats();
         this.calculateMoves(false);
         this.calculateMoves(true);
+
+        if (this.state.board.whiteMovesCount === 0 || this.state.board.blackMovesCount === 0) {
+            this.setState({ currnetTurn: '' });
+        }
     }
 
     updateKingPosition(color, x, y) {

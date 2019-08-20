@@ -14,6 +14,8 @@ export default class Board {
     constructor() {
         // super(this);
         this.boardSpaces = [];
+        this.whiteMovesCount = 0;
+        this.blackMovesCount = 0;
         for (let row = 0; row < 8; row++) {
             const rowSpaces = [];
 
@@ -58,5 +60,10 @@ export default class Board {
             }
             this.boardSpaces.push(rowSpaces);
         }
+    }
+
+    resetMovesCount() {
+        this.whiteMovesCount = 0;
+        this.blackMovesCount = 0;
     }
 }
