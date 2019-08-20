@@ -86,6 +86,7 @@ export default class App extends Component {
                     this.setState((state) => {
                         const { boardSpaces } = state.board;
                         boardSpaces[y][3].figure = state.board.boardSpaces[y][0].figure;
+                        boardSpaces[y][3].figure.x = 3;
                         boardSpaces[y][0].figure = {};
                         return boardSpaces;
                     });
@@ -93,6 +94,7 @@ export default class App extends Component {
                     this.setState((state) => {
                         const { boardSpaces } = state.board;
                         boardSpaces[y][5].figure = state.board.boardSpaces[y][0].figure;
+                        boardSpaces[y][5].figure.x = 5;
                         boardSpaces[y][7].figure = {};
                         return boardSpaces;
                     });
@@ -194,7 +196,7 @@ export default class App extends Component {
         this.calculateMoves(true);
 
         if (this.state.board.whiteMovesCount === 0 || this.state.board.blackMovesCount === 0) {
-            this.setState({ currnetTurn: '' });
+            this.state.currnetTurn = '';
         }
     }
 
