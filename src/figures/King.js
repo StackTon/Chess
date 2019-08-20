@@ -137,6 +137,22 @@ export default class King extends Figure {
             return false;
         }
 
+        const opositeColor = this.color === constants.BLACK ? constants.WHITE : constants.BLACK;
+        const kingsThrets = board.boardSpaces[this.y][this.x][`${opositeColor}Threat`];
+
+        if (kingsThrets.length > 0) {
+            for (let i = 0; i < kingsThrets.length; i++) {
+                const figure = kingsThrets[i];
+                if (figure.x !== x || figure.y !== y) {
+                    if (figure.name !== constants.KNIGHT || figure.name !== constants.PAWN) {
+                        if (utils.checkIfTwoPointsAreOnTheSameLine(x, y, figure.x, figure.y)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         const { figure } = board.boardSpaces[y][x];
 
         if (checkForColor === true && !utils.checkForColorDifrence(figure.color, color)) {
