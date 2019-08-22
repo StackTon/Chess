@@ -38,23 +38,40 @@ export default class Figure {
             possibleMoves: [],
         };
 
-        if (!utils.checkIfTwoPointsAreOnTheSameLine(king.x, king.y, fromX, fromY)) {
+        const request = [king.x, king.y, fromX, fromY];
+        if (!utils.checkIfTwoPointsAreOnTheSameLine(...request)) {
             return response;
         }
 
-        const opositeColor = color === constants.BLACK ? constants.WHITE : constants.BLACK;
-        const threats = board.boardSpaces[fromY][fromX][`${opositeColor}Threat`];
-        if (threats.length === 0) {
-            return response;
-        }
-        for (let i = 0; i < threats.length; i++) {
-            const figure = threats[i];
-            if (figure.name === constants.QUEEN || figure.name === constants.ROOK || figure.name === constants.BISHOP) {
-                const request = [king.x, king.y, figure.x, figure.y];
-                if (utils.checkIfTwoPointsAreOnTheSameLine(...request)) {
+        const movesBetweenFigureAndKing = utils.getAllPointsBetweenTwoPoints(...request);
+
+        for (let i = 0; i < movesBetweenFigureAndKing.length; i++) {
+            const spaceCoordinates = movesBetweenFigureAndKing[i];
+            const currnetFigire = board.boardSpaces[spaceCoordinates.y][spaceCoordinates.x].figure;
+            if (Object.keys(currnetFigire).length !== 0) {
+                if (currnetFigire.x === fromX && currnetFigire.y === fromY) {
                     response.isPinned = true;
-                    response.possibleMoves = utils.getAllPointsBetweenTwoPoints(...request);
+                } else {
                     return response;
+                }
+            }
+        }
+
+        if (response.isPinned) {
+            const opositeColor = color === constants.BLACK ? constants.WHITE : constants.BLACK;
+            const threats = board.boardSpaces[fromY][fromX][`${opositeColor}Threat`];
+            if (threats.length === 0) {
+                response.isPinned = false;
+                return response;
+            }
+            for (let i = 0; i < threats.length; i++) {
+                const figure = threats[i];
+                if (figure.name === constants.QUEEN || figure.name === constants.ROOK || figure.name === constants.BISHOP) {
+                    const req = [king.x, king.y, figure.x, figure.y];
+                    if (utils.checkIfTwoPointsAreOnTheSameLine(...req)) {
+                        response.possibleMoves = utils.getAllPointsBetweenTwoPoints(...req);
+                        return response;
+                    }
                 }
             }
         }
