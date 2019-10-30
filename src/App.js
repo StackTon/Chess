@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 
 // classes
 import Board from './bord/Board';
-import Queen from './figures/Queen';
-import Bishop from './figures/Bishop';
-import Knight from './figures/Knight';
-import Rook from './figures/Rook';
+
+import figureFactory from './utils/figureFactory';
 
 // components
 import Field from './components/Field';
@@ -141,13 +139,13 @@ export default class App extends Component {
         const { x, y, color } = this.state.promotionMove;
         let promotionFigure = {};
         if (figure === constants.QUEEN) {
-            promotionFigure = new Queen(color, x, y);
+            promotionFigure = figureFactory(constants.QUEEN, color, x, y);
         } else if (figure === constants.BISHOP) {
-            promotionFigure = new Bishop(color, x, y);
+            promotionFigure = figureFactory(constants.BISHOP, color, x, y);
         } else if (figure === constants.KNIGHT) {
-            promotionFigure = new Knight(color, x, y);
+            promotionFigure = figureFactory(constants.KNIGHT, color, x, y);
         } else if (figure === constants.ROOK) {
-            promotionFigure = new Rook(color, x, y);
+            promotionFigure = figureFactory(constants.ROOK, color, x, y);
         }
 
         this.setState((state) => {
