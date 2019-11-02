@@ -44,24 +44,24 @@ export default class Figure {
         }
 
         const movesBetweenFigureAndKing = utils.getAllPointsBetweenTwoPoints(...request);
+        let isFigureOnKingLine = false;
 
         for (let i = 0; i < movesBetweenFigureAndKing.length; i++) {
             const spaceCoordinates = movesBetweenFigureAndKing[i];
             const currnetFigire = board.boardSpaces[spaceCoordinates.y][spaceCoordinates.x].figure;
             if (Object.keys(currnetFigire).length !== 0) {
                 if (currnetFigire.x === fromX && currnetFigire.y === fromY) {
-                    response.isPinned = true;
+                    isFigureOnKingLine = true;
                 } else {
                     return response;
                 }
             }
         }
 
-        if (response.isPinned) {
+        if (isFigureOnKingLine) {
             const opositeColor = color === constants.BLACK ? constants.WHITE : constants.BLACK;
             const threats = board.boardSpaces[fromY][fromX][`${opositeColor}Threat`];
             if (threats.length === 0) {
-                response.isPinned = false;
                 return response;
             }
             for (let i = 0; i < threats.length; i++) {
@@ -69,6 +69,7 @@ export default class Figure {
                 if (figure.name === constants.QUEEN || figure.name === constants.ROOK || figure.name === constants.BISHOP) {
                     const req = [king.x, king.y, figure.x, figure.y];
                     if (utils.checkIfTwoPointsAreOnTheSameLine(...req)) {
+                        response.isPinned = true;
                         response.possibleMoves = utils.getAllPointsBetweenTwoPoints(...req);
                         return response;
                     }
