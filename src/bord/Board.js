@@ -52,9 +52,4 @@ export default class Board {
             this.boardSpaces.push(rowSpaces);
         }
     }
-
-    resetMovesCount() {
-        this.whiteMovesCount = 0;
-        this.blackMovesCount = 0;
-    }
 }
