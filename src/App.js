@@ -52,16 +52,20 @@ export default class App extends Component {
         this.moveTo = this.moveTo.bind(this);
         this.promotionPawn = this.promotionPawn.bind(this);
         this.cleanBlackAndWhiteThreats = this.cleanBlackAndWhiteThreats.bind(this);
-        this.calculatePossibleMovesForAllFigures = this.calculatePossibleMovesForAllFigures.bind(this);
+        this.calculateAllPossibleMoves = this.calculateAllPossibleMoves.bind(this);
         this.calculateMoves = this.calculateMoves.bind(this);
     }
 
     componentDidMount() {
-        this.calculatePossibleMovesForAllFigures(this.state);
+        this.setState((state) => {
+            this.calculateAllPossibleMoves(state);
+            return state;
+        });
     }
 
     setActiveFigure(x, y) {
-        if (this.state.activeFigureCoordinates.x === x && this.state.activeFigureCoordinates.y === y) {
+        const { activeFigureCoordinates } = this.state;
+        if (activeFigureCoordinates.x === x && activeFigureCoordinates.y === y) {
             this.setState({ activeFigureCoordinates: { x: -1, y: -1 }, possibleMoves: [] });
         } else {
             const currnetFigure = this.state.board.boardSpaces[y][x].figure;
@@ -73,9 +77,10 @@ export default class App extends Component {
 
     moveTo(x, y) {
         this.setState((state) => {
-            const currnetFigure = state.board.boardSpaces[state.activeFigureCoordinates.y][state.activeFigureCoordinates.x].figure;
-
             const { boardSpaces } = state.board;
+            const { activeFigureCoordinates } = state;
+            const activeSpace = boardSpaces[activeFigureCoordinates.y][activeFigureCoordinates.x];
+            const currnetFigure = activeSpace.figure;
 
             if (currnetFigure.color === constants.WHITE) {
                 state.currnetTurn = constants.BLACK;
@@ -99,8 +104,11 @@ export default class App extends Component {
             }
 
             // en pasan move
-            if (currnetFigure.name === constants.PAWN && Math.abs(state.activeFigureCoordinates.x - x) === 1 && Math.abs(state.activeFigureCoordinates.y - y) === 1 && Object.keys(state.board.boardSpaces[y][x].figure).length === 0) {
-                boardSpaces[state.activeFigureCoordinates.y][x].figure = {};
+            if (currnetFigure.name === constants.PAWN
+                && Math.abs(activeFigureCoordinates.x - x) === 1
+                && Math.abs(activeFigureCoordinates.y - y) === 1
+                && Object.keys(boardSpaces[y][x].figure).length === 0) {
+                boardSpaces[activeFigureCoordinates.y][x].figure = {};
             }
 
             // pawn promotion
@@ -109,7 +117,7 @@ export default class App extends Component {
             }
 
             boardSpaces[y][x].figure = currnetFigure;
-            boardSpaces[state.activeFigureCoordinates.y][state.activeFigureCoordinates.x].figure = {};
+            boardSpaces[activeFigureCoordinates.y][activeFigureCoordinates.x].figure = {};
             state.lastMove = {
                 fromX: state.activeFigureCoordinates.x,
                 fromY: state.activeFigureCoordinates.y,
@@ -132,7 +140,7 @@ export default class App extends Component {
             state.activeFigureCoordinates = { x: -1, y: -1 };
             state.possibleMoves = [];
 
-            this.calculatePossibleMovesForAllFigures(state);
+            this.calculateAllPossibleMoves(state);
 
             if (state.board.whiteMovesCount === 0 || state.board.blackMovesCount === 0) {
                 state.currnetTurn = '';
@@ -185,7 +193,7 @@ export default class App extends Component {
         }
     }
 
-    calculatePossibleMovesForAllFigures(state) {
+    calculateAllPossibleMoves(state) {
         state.board.whiteMovesCount = 0;
         state.board.blackMovesCount = 0;
         this.cleanBlackAndWhiteThreats(state);

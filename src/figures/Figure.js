@@ -66,7 +66,9 @@ export default class Figure {
             }
             for (let i = 0; i < threats.length; i++) {
                 const figure = threats[i];
-                if (figure.name === constants.QUEEN || figure.name === constants.ROOK || figure.name === constants.BISHOP) {
+                if (figure.name === constants.QUEEN
+                        || figure.name === constants.ROOK
+                        || figure.name === constants.BISHOP) {
                     const req = [king.x, king.y, figure.x, figure.y];
                     if (utils.checkIfTwoPointsAreOnTheSameLine(...req)) {
                         response.isPinned = true;
@@ -94,17 +96,18 @@ export default class Figure {
         let moves = this.figureMoves(board, checkForColor, king, lastMove);
 
         // check if the king is in check
-        const kingCoordinates = king;
+        const { x, y } = king;
         const opositeColor = this.color === constants.BLACK ? constants.WHITE : constants.BLACK;
-        const threatFigures = board.boardSpaces[kingCoordinates.y][kingCoordinates.x][`${opositeColor}Threat`];
+        const threatFigures = board.boardSpaces[y][x][`${opositeColor}Threat`];
         if (threatFigures.length === 1 && this.name !== constants.KING) {
             const threatFigure = threatFigures[0];
             let stopCheckMoves = [];
+            const threatFigureName = threatFigures[0].name;
 
-            if (threatFigures[0].name === constants.KNIGHT || threatFigures[0].name === constants.PAWN) {
+            if (threatFigureName === constants.KNIGHT || threatFigureName === constants.PAWN) {
                 stopCheckMoves.push({ x: threatFigure.x, y: threatFigure.y });
             } else {
-                const request = [kingCoordinates.x, kingCoordinates.y, threatFigure.x, threatFigure.y];
+                const request = [x, y, threatFigure.x, threatFigure.y];
                 stopCheckMoves = utils.getAllPointsBetweenTwoPoints(...request);
             }
 

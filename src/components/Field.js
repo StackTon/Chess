@@ -5,23 +5,24 @@ import constants from '../utils/constants';
 
 const Field = (props) => {
     const { currentSpace, currnetTurn, lastMove } = props;
-    const figureName = currentSpace.figure.name;
-    const figureColor = currentSpace.figure.color;
+    const { blackThreat, whiteThreat, figure, color } = currentSpace;
+    const figureName = figure.name;
+    const figureColor = figure.color;
 
     let isThisPossibleMove = false;
     let figureClassName = 'figure';
-    let spaceClassName = `field ${currentSpace.color}`;
+    let spaceClassName = `field ${color}`;
 
-    const checkIfXIsActive = props.x === props.activeFigureCoordinates.x;
-    const checkIfYIsActive = props.y === props.activeFigureCoordinates.y;
-    if (checkIfXIsActive && checkIfYIsActive) {
+    const isXActive = props.x === props.activeFigureCoordinates.x;
+    const isYActive = props.y === props.activeFigureCoordinates.y;
+    if (isXActive && isYActive) {
         figureClassName += ' active-figure';
     }
 
-    const checkIfWhiteThreatenThisSpace = figureColor === constants.WHITE && currentSpace.blackThreat.length > 0;
-    const checkIfBlackThreatenThisSpace = figureColor === constants.BLACK && currentSpace.whiteThreat.length > 0;
-    const checkIfKingIsThreaten = checkIfWhiteThreatenThisSpace || checkIfBlackThreatenThisSpace;
-    if (figureName === constants.KING && checkIfKingIsThreaten) {
+    const isWhiteThreatenThisSpace = figureColor === constants.WHITE && blackThreat.length > 0;
+    const isBlackThreatenThisSpace = figureColor === constants.BLACK && whiteThreat.length > 0;
+    const isKingThreaten = isWhiteThreatenThisSpace || isBlackThreatenThisSpace;
+    if (figureName === constants.KING && isKingThreaten) {
         figureClassName += ' threaten-king';
     }
 
