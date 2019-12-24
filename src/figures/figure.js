@@ -1,15 +1,15 @@
 import utils from '../utils/utils';
 import constants from '../utils/constants';
 
-export default class Figure {
-    constructor(color, x, y) {
+export default {
+    initFigure(color, x, y) {
         this.color = color;
         this.x = x;
         this.y = y;
         this.possibleMoves = [];
-    }
+    },
 
-    static canMoveToSpace({ board, x, y, color, checkForColor }) {
+    canMoveToSpace({ board, x, y, color, checkForColor }) {
         const response = {
             canMoveToSpace: false,
             lastMove: false,
@@ -30,9 +30,9 @@ export default class Figure {
             return response;
         }
         return response;
-    }
+    },
 
-    static isPinned(board, king, fromX, fromY, color) {
+    isPinned(board, king, fromX, fromY, color) {
         const response = {
             isPinned: false,
             possibleMoves: [],
@@ -80,9 +80,9 @@ export default class Figure {
         }
 
         return response;
-    }
+    },
 
-    static handerIsPinnedResponse(response, moves) {
+    handerIsPinnedResponse(response, moves) {
         if (response.isPinned === false) {
             return moves;
         }
@@ -90,7 +90,7 @@ export default class Figure {
             moves,
             response.possibleMoves,
         );
-    }
+    },
 
     calculatePossibleMoves(board, king, lastMove, checkForColor) {
         let moves = this.figureMoves(board, checkForColor, king, lastMove);
@@ -127,7 +127,7 @@ export default class Figure {
                 }
             }
         }
-    }
+    },
 
     bishopMoves(board, checkForColor) {
         const currentX = this.x;
@@ -146,7 +146,7 @@ export default class Figure {
                 const upLeftY = currentY - i;
                 const upLeftX = currentX - i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: upLeftX,
                     y: upLeftY,
@@ -167,7 +167,7 @@ export default class Figure {
                 const upRightY = currentY - i;
                 const upRightX = currentX + i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: upRightX,
                     y: upRightY,
@@ -188,7 +188,7 @@ export default class Figure {
                 const downRightY = currentY + i;
                 const downRightX = currentX + i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: downRightX,
                     y: downRightY,
@@ -209,7 +209,7 @@ export default class Figure {
                 const downLeftY = currentY + i;
                 const downLefttX = currentX - i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: downLefttX,
                     y: downLeftY,
@@ -231,7 +231,7 @@ export default class Figure {
         }
 
         return moves;
-    }
+    },
 
     rookMoves(board, checkForColor) {
         const currentX = this.x;
@@ -250,7 +250,7 @@ export default class Figure {
                 const upY = currentY - i;
                 const upX = currentX;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: upX,
                     y: upY,
@@ -271,7 +271,7 @@ export default class Figure {
                 const rightY = currentY;
                 const rightX = currentX + i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: rightX,
                     y: rightY,
@@ -292,7 +292,7 @@ export default class Figure {
                 const downY = currentY + i;
                 const downX = currentX;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: downX,
                     y: downY,
@@ -313,7 +313,7 @@ export default class Figure {
                 const leftY = currentY;
                 const leftX = currentX - i;
 
-                const response = this.constructor.canMoveToSpace({
+                const response = this.canMoveToSpace({
                     board,
                     x: leftX,
                     y: leftY,
@@ -335,7 +335,7 @@ export default class Figure {
         }
 
         return moves;
-    }
+    },
 
     checkIfSpaceContainsFigure(board, x, y) {
         if (!utils.checkIfCordinatesAreValid(x, y)) {
@@ -349,7 +349,7 @@ export default class Figure {
         }
 
         return true;
-    }
+    },
 
     isThisSpaceThreaten(board, x, y) {
         const space = board.boardSpaces[y][x];
@@ -358,5 +358,5 @@ export default class Figure {
             return space.whiteThreat.length > 0;
         }
         return space.blackThreat.length > 0;
-    }
-}
+    },
+};

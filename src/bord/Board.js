@@ -18,7 +18,7 @@ export default class Board {
                     spaceColor = constatns.BLACK;
                 }
 
-                let newFigire;
+                let newFigure;
                 let figureColor;
 
                 if (row === 0) {
@@ -29,25 +29,25 @@ export default class Board {
 
                 if (row === 0 || row === 7) {
                     if (col === 0 || col === 7) {
-                        newFigire = figureFactory(constatns.ROOK, figureColor, col, row);
+                        newFigure = figureFactory(constatns.ROOK, figureColor, col, row);
                     } else if (col === 1 || col === 6) {
-                        newFigire = figureFactory(constatns.KNIGHT, figureColor, col, row);
+                        newFigure = figureFactory(constatns.KNIGHT, figureColor, col, row);
                     } else if (col === 2 || col === 5) {
-                        newFigire = figureFactory(constatns.BISHOP, figureColor, col, row);
+                        newFigure = figureFactory(constatns.BISHOP, figureColor, col, row);
                     } else if (col === 3) {
-                        newFigire = figureFactory(constatns.QUEEN, figureColor, col, row);
+                        newFigure = figureFactory(constatns.QUEEN, figureColor, col, row);
                     } else if (col === 4) {
-                        newFigire = figureFactory(constatns.KING, figureColor, col, row);
+                        newFigure = figureFactory(constatns.KING, figureColor, col, row);
                     }
                 } else if (row === 1) {
-                    newFigire = figureFactory(constatns.PAWN, constatns.BLACK, col, row, 7);
+                    newFigure = figureFactory(constatns.PAWN, constatns.BLACK, col, row, 7);
                 } else if (row === 6) {
-                    newFigire = figureFactory(constatns.PAWN, constatns.WHITE, col, row, 0);
+                    newFigure = figureFactory(constatns.PAWN, constatns.WHITE, col, row, 0);
                 } else {
-                    newFigire = {};
+                    newFigure = {};
                 }
 
-                rowSpaces.push(new Space(row + col, spaceColor, newFigire));
+                rowSpaces.push(new Space(row + col, spaceColor, newFigure));
             }
             this.boardSpaces.push(rowSpaces);
         }
